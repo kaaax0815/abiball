@@ -1,5 +1,6 @@
-import { Form, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 import type { ActionArgs } from '@remix-run/node';
+import { Form, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+
 import { badRequest } from '~/utils/request.server';
 
 function validateUsername(username: unknown) {
