@@ -3,7 +3,17 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@re
 
 import stylesheet from '~/tailwind.css';
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: stylesheet },
+  {
+    rel: 'preconnect',
+    href: 'https://fonts.bunny.net'
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.bunny.net/css?family=inter:400'
+  }
+];
 
 export const meta: V2_MetaFunction = () => {
   return [
