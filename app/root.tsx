@@ -1,5 +1,9 @@
-import type { V2_MetaFunction } from '@remix-run/node';
+import type { LinksFunction, V2_MetaFunction } from '@remix-run/node';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+
+import stylesheet from '~/tailwind.css';
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }];
 
 export const meta: V2_MetaFunction = () => {
   return [
