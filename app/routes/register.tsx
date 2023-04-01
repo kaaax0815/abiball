@@ -1,13 +1,28 @@
 import type { ActionArgs } from '@remix-run/node';
 import { Form, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 
+import FormError from '~/components/FormError';
+import FormInput from '~/components/FormInput';
+import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { badRequest, validateRedirectUrl } from '~/utils/request.server';
 import { createUserSession, register } from '~/utils/session.server';
 
-function validateName(username: unknown) {
+function validateFirstname(username: unknown) {
   if (typeof username !== 'string' || username.length < 3) {
-    return `Namen müssen mindestens 3 Zeichen lang sein`;
+    return `Vorname muss mindestens 3 Zeichen lang sein`;
+  }
+}
+
+function validateLastname(username: unknown) {
+  if (typeof username !== 'string' || username.length < 3) {
+    return `Nachname muss mindestens 3 Zeichen lang sein`;
+  }
+}
+
+function validateUsername(username: unknown) {
+  if (typeof username !== 'string' || username.length < 3) {
+    return `Benutzername muss mindestens 3 Zeichen lang sein`;
   }
 }
 
@@ -43,9 +58,9 @@ export const action = async ({ request }: ActionArgs) => {
   const fields = { firstname, lastname, username, password };
 
   const fieldErrors = {
-    firstname: validateName(firstname),
-    lastname: validateName(lastname),
-    username: validateName(username),
+    firstname: validateFirstname(firstname),
+    lastname: validateLastname(lastname),
+    username: validateUsername(username),
     password: validatePassword(password)
   };
 
@@ -65,7 +80,7 @@ export const action = async ({ request }: ActionArgs) => {
     return badRequest({
       fieldErrors: null,
       fields,
-      formError: `Nutzername bereits vergeben`
+      formError: `Benutzername bereits vergeben`
     });
   }
 
@@ -87,71 +102,58 @@ export default function Register() {
   const actionData = useActionData<typeof action>();
   const submitting = navigation.state === 'submitting';
   return (
-    <main>
-      <h1>Registrieren</h1>
-      <h3>Hier kannst du dich registrieren</h3>
-      <Form method="post">
-        <div>
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get('redirectTo') ?? undefined}
-          />
-          <label htmlFor="firstname-input">Vorname</label>
-          <input
-            type="text"
-            id="firstname-input"
-            name="firstname"
-            defaultValue={actionData?.fields?.firstname}
-          />
-          {actionData?.fieldErrors?.firstname ? (
-            <p className="form-validation-error" role="alert" id="firstname-error">
-              {actionData.fieldErrors.firstname}
-            </p>
-          ) : null}
+    <div className="flex items-center h-screen bg-slate-200">
+      <main className="flex flex-col max-w-sm mx-auto items-center justify-center px-4 py-4 border rounded-md border-gray-200 shadow bg-white">
+        <div className="w-full max-w-md space-y-8">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
+            Registrieren
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Erstelle ein Konto um deine Tickets zu verwalten
+          </p>
+          <Form method="post">
+            <input
+              type="hidden"
+              name="redirectTo"
+              value={searchParams.get('redirectTo') ?? undefined}
+            />
+            <FormInput
+              id="firstname"
+              name="firstname"
+              label="Vorname"
+              autoComplete="given-name"
+              error={actionData?.fieldErrors?.firstname}
+              defaultValue={actionData?.fields?.firstname}
+            />
+            <FormInput
+              id="lastname"
+              name="lastname"
+              label="Nachname"
+              autoComplete="family-name"
+              error={actionData?.fieldErrors?.lastname}
+              defaultValue={actionData?.fields?.lastname}
+            />
+            <FormInput
+              id="username"
+              name="username"
+              label="Benutzername"
+              autoComplete="username"
+              error={actionData?.fieldErrors?.username}
+              defaultValue={actionData?.fields?.username}
+            />
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              label="Passwort"
+              autoComplete="new-password"
+              error={actionData?.fieldErrors?.password}
+            />
+            <FormError error={actionData?.formError} />
+            <FormSubmit label="Registrieren" submitting={submitting} />
+          </Form>
         </div>
-        <div>
-          <label htmlFor="lastname-input">Nachname</label>
-          <input
-            type="text"
-            id="lastname-input"
-            name="lastname"
-            defaultValue={actionData?.fields?.lastname}
-          />
-          {actionData?.fieldErrors?.lastname ? (
-            <p className="form-validation-error" role="alert" id="lastname-error">
-              {actionData.fieldErrors.lastname}
-            </p>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="username-input">Benutzername</label>
-          <input
-            type="text"
-            id="username-input"
-            name="username"
-            defaultValue={actionData?.fields?.username}
-          />
-          {actionData?.fieldErrors?.username ? (
-            <p className="form-validation-error" role="alert" id="username-error">
-              {actionData.fieldErrors.username}
-            </p>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="password-input">Passwort</label>
-          <input id="password-input" name="password" type="password" />
-          {actionData?.fieldErrors?.password ? (
-            <p className="form-validation-error" role="alert" id="password-error">
-              {actionData.fieldErrors.password}
-            </p>
-          ) : null}
-        </div>
-        <div id="form-error-message">
-          {actionData?.formError ? <p role="alert">{actionData.formError}</p> : null}
-        </div>
-        <button type="submit">{submitting ? 'Registrieren...' : 'Registrieren'}</button>
-      </Form>
-    </main>
+      </main>
+    </div>
   );
 }

@@ -1,6 +1,9 @@
 import type { ActionArgs } from '@remix-run/node';
 import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
 
+import FormError from '~/components/FormError';
+import FormInput from '~/components/FormInput';
+import FormSubmit from '~/components/FormSubmit';
 import { badRequest, validateRedirectUrl } from '~/utils/request.server';
 import { createUserSession, login } from '~/utils/session.server';
 
@@ -42,40 +45,49 @@ export default function Login() {
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
   const submitting = navigation.state === 'submitting';
+  const redirectTo = searchParams.get('redirectTo');
   return (
-    <main>
-      <h1 className="text-lg text-blue-600 hover:underline">Anmelden</h1>
-      <h3>Hier kannst du dich anmelden</h3>
-      <p>
-        Noch kein Konto? Hier{' '}
-        <Link to={`/register?redirectTo=${searchParams.get('redirectTo')}`} prefetch="intent">
-          registrieren
-        </Link>
-      </p>
-      <Form method="post">
-        <div>
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get('redirectTo') ?? undefined}
-          />
-          <label htmlFor="username-input">Benutzername</label>
-          <input
-            type="text"
-            id="username-input"
-            name="username"
-            defaultValue={actionData?.fields?.username}
-          />
+    <div className="flex items-center h-screen bg-slate-200">
+      <main className="flex flex-col max-w-sm mx-auto items-center justify-center px-4 py-4 border rounded-md border-gray-200 shadow bg-white">
+        <div className="w-full max-w-md space-y-8">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Anmelden
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            oder{' '}
+            <Link
+              to={
+                redirectTo ? `/register?redirectTo=${searchParams.get('redirectTo')}` : '/register'
+              }
+              prefetch="intent"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              registrieren
+            </Link>
+          </p>
+          <Form method="post">
+            <input type="hidden" name="redirectTo" value={redirectTo ?? undefined} />
+            <FormInput
+              id="username"
+              name="username"
+              label="Benutzername"
+              autoComplete="username"
+              error={undefined}
+              defaultValue={actionData?.fields?.username}
+            />
+            <FormInput
+              id="password"
+              name="password"
+              type="password"
+              label="Passwort"
+              autoComplete="current-password"
+              error={undefined}
+            />
+            <FormError error={actionData?.formError} />
+            <FormSubmit label="Anmelden" submitting={submitting} />
+          </Form>
         </div>
-        <div>
-          <label htmlFor="password-input">Passwort</label>
-          <input id="password-input" name="password" type="password" />
-        </div>
-        <div id="form-error-message">
-          {actionData?.formError ? <p role="alert">{actionData.formError}</p> : null}
-        </div>
-        <button type="submit">{submitting ? 'Anmelden...' : 'Anmelden'}</button>
-      </Form>
-    </main>
+      </main>
+    </div>
   );
 }
