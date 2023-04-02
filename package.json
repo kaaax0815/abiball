@@ -11,14 +11,19 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.13",
+    "@heroicons/react": "^2.0.17",
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "@netlify/functions": "^1.4.0",
     "@prisma/client": "^4.12.0",
     "@remix-run/netlify": "^1.15.0",
     "@remix-run/node": "^1.15.0",
     "@remix-run/react": "^1.15.0",
     "bcryptjs": "^2.4.3",
+    "bwip-js": "^3.3.0",
     "cross-env": "^7.0.3",
     "isbot": "^3.6.7",
+    "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -28,6 +33,7 @@
     "@remix-run/serve": "^1.15.0",
     "@tailwindcss/forms": "^0.5.3",
     "@types/bcryptjs": "^2.4.2",
+    "@types/bwip-js": "^3.2.0",
     "@types/react": "^18.0.31",
     "@types/react-dom": "^18.0.11",
     "esbuild-register": "^3.4.2",

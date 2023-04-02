@@ -1,6 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 
 import { requireLogin } from '~/utils/request.server';
 import { getUser } from '~/utils/session.server';
@@ -26,9 +26,9 @@ export default function Tickets() {
       <ul>
         {loaderData.map((ticket) => (
           <li key={ticket.id}>
-            <a href={`/tickets/${ticket.id}`}>
+            <Link reloadDocument to={`/tickets/${ticket.id}.pdf`}>
               {ticket.firstName} {ticket.lastName}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

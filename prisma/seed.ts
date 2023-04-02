@@ -34,6 +34,8 @@ async function seed() {
       }
     }
   });
+
+  return { kody, kodyTicket, aliceTicket };
 }
 
 seed();

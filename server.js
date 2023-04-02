@@ -9,6 +9,7 @@ import { createRequestHandler } from '@remix-run/netlify';
  *  - `netlifyGraphSignature`: a signature for subscription events. Will be
  *    present if a secret is set.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getLoadContext(event, context) {
   let rawAuthorizationString;
   let netlifyGraphToken;
