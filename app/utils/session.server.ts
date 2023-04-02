@@ -77,7 +77,7 @@ export async function getUserId(request: Request) {
   return userId;
 }
 
-export async function requireUser(
+export async function requireUserId(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
 ) {
@@ -107,7 +107,7 @@ export async function getUser(request: Request) {
 
 export async function logout(request: Request) {
   const session = await getUserSession(request);
-  return redirect('/login', {
+  return redirect('/', {
     headers: {
       'Set-Cookie': await storage.destroySession(session)
     }

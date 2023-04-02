@@ -8,5 +8,9 @@
   "editor.useTabStops": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  "cSpell.words": [
+    "Abiball",
+    "firstname"
+  ]
 }

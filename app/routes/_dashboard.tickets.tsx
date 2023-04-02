@@ -20,7 +20,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function Tickets() {
   const loaderData = useLoaderData<typeof loader>();
   return (
-    <>
+    <main>
       <h1>Tickets</h1>
       <h2>Hier kannst du Tickets kaufen oder herunterladen</h2>
       <ul>
@@ -32,6 +32,6 @@ export default function Tickets() {
           </li>
         ))}
       </ul>
-    </>
+    </main>
   );
 }
