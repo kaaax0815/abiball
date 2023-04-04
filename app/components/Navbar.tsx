@@ -28,7 +28,7 @@ export default function Navbar({ username }: NavbarProps) {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
+                <div className="flex shrink-0 items-center">
                   <img className="block h-8 w-auto" src="/Abimotto.png" alt="Your Company" />
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
@@ -37,7 +37,7 @@ export default function Navbar({ username }: NavbarProps) {
                       <NavLink
                         key={item.name}
                         to={item.to}
-                        className="rounded-md px-3 py-2 text-sm font-medium aria-active:bg-gray-900 aria-active:text-white text-gray-300 hover:bg-gray-700 hover:text-white"
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white aria-active:bg-gray-900 aria-active:text-white"
                       >
                         {item.name}
                       </NavLink>
@@ -49,9 +49,9 @@ export default function Navbar({ username }: NavbarProps) {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="flex rounded-md bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Benutzermenü öffnen</span>
-                      <span className="text-white rounded px-3 py-2">{username}</span>
+                      <span className="px-3 py-2 text-white">{username}</span>
                     </Menu.Button>
                   </div>
                   <Transition
@@ -63,7 +63,7 @@ export default function Navbar({ username }: NavbarProps) {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <Link
@@ -91,7 +91,7 @@ export default function Navbar({ username }: NavbarProps) {
                   key={item.name}
                   as={NavLink}
                   to={item.to}
-                  className="block rounded-md px-3 py-2 text-base font-medium aria-active:bg-gray-900 aria-active:text-white text-gray-300 hover:bg-gray-700 hover:text-white"
+                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white aria-active:bg-gray-900 aria-active:text-white"
                 >
                   {item.name}
                 </Disclosure.Button>

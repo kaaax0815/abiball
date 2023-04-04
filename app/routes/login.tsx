@@ -47,8 +47,8 @@ export default function Login() {
   const submitting = navigation.state === 'submitting';
   const redirectTo = searchParams.get('redirectTo');
   return (
-    <div className="flex items-center h-screen bg-slate-200">
-      <main className="flex flex-col max-w-sm mx-auto items-center justify-center px-4 py-4 border rounded-md border-gray-200 shadow bg-white">
+    <div className="flex h-screen items-center bg-slate-200">
+      <main className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Anmelden

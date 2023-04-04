@@ -34,7 +34,7 @@ export default function FormInput({
         defaultValue={defaultValue}
       />
       {error ? (
-        <div className="text-red-500 text-sm">
+        <div className="text-sm text-red-500">
           <p role="alert">{error}</p>
         </div>
       ) : null}

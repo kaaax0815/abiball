@@ -7,7 +7,7 @@ export default function FormError({ error }: FormErrorProps) {
     return null;
   }
   return (
-    <div className="text-red-500 text-sm mt-3">
+    <div className="mt-3 text-sm text-red-500">
       <p role="alert">{error}</p>
     </div>
   );

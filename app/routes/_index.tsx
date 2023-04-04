@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react';
 
 export default function Index() {
   return (
-    <main className="h-screen flex flex-col justify-center text-center">
+    <main className="flex h-screen flex-col justify-center text-center">
       <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Abiball 2023</h1>
       <h3 className="mt-6 text-lg leading-8 text-gray-600">Abiball Gymnasium Bad Königshofen</h3>
       <div className="mt-10">

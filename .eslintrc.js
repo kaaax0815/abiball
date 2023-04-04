@@ -3,6 +3,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:tailwindcss/recommended',
     '@remix-run/eslint-config',
     '@remix-run/eslint-config/node',
     'prettier/prettier'
