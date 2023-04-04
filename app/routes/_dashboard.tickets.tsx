@@ -30,17 +30,23 @@ export default function Tickets() {
   const loaderData = useLoaderData<typeof loader>();
   return (
     <main>
-      <h1>Tickets</h1>
-      <h2>Hier kannst du Tickets kaufen oder herunterladen</h2>
+      <h2 className="text-xl">Hier kannst du Tickets kaufen oder herunterladen</h2>
       <ul>
         {loaderData.map((ticket) => (
-          <li key={ticket.id}>
-            <Link reloadDocument to={`/tickets/${ticket.id}.pdf`}>
+          <li key={ticket.id} className="my-5">
+            <Link
+              reloadDocument
+              to={`/ticket/${ticket.id}.pdf`}
+              className="rounded-sm bg-slate-500 p-2"
+            >
               {ticket.firstName} {ticket.lastName}
             </Link>
           </li>
         ))}
       </ul>
+      <Link to="/ticket/buy" className="mt-5 rounded-md bg-indigo-400 p-3 text-white">
+        Ticket kaufen
+      </Link>
     </main>
   );
 }
