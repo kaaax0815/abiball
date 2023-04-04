@@ -1,49 +1,41 @@
-import type { ActionArgs } from '@remix-run/node';
-import { Form, Link, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
+import { Form, Link, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 
 import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
-import { badRequest, validateRedirectUrl } from '~/utils/request.server';
-import { createUserSession, login } from '~/utils/session.server';
+import { authenticator } from '~/services/auth.server';
+import { sessionStorage } from '~/services/session.server';
+import { parseRedirectToFromForm, parseRedirectToFromRequest } from '~/utils/redirect.server';
 
-export const action = async ({ request }: ActionArgs) => {
-  const form = await request.formData();
-  const username = form.get('username');
-  const password = form.get('password');
-  const redirectTo = form.get('redirectTo') || '/tickets';
-  if (
-    typeof username !== 'string' ||
-    typeof password !== 'string' ||
-    typeof redirectTo !== 'string'
-  ) {
-    return badRequest({
-      fieldErrors: null,
-      fields: null,
-      formError: `Ungültiges Formular`
-    });
+export async function action({ request }: ActionArgs) {
+  const clonedRequest = request.clone();
+  const formData = await clonedRequest.formData();
+  const redirectTo = parseRedirectToFromForm(formData.get('redirectTo'));
+  return await authenticator.authenticate('user-pass', request, {
+    successRedirect: redirectTo,
+    failureRedirect: `/login?redirectTo=${redirectTo}`
+  });
+}
+
+export async function loader({ request }: LoaderArgs) {
+  const redirectTo = parseRedirectToFromRequest(request);
+  await authenticator.isAuthenticated(request, {
+    successRedirect: redirectTo
+  });
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+  const error = session.get(authenticator.sessionErrorKey);
+  if (error?.message) {
+    return json({ message: error.message as string });
   }
-  const redirectToUrl = validateRedirectUrl(redirectTo);
-
-  const fields = { username, password };
-
-  const user = await login({ username, password });
-
-  if (!user) {
-    return badRequest({
-      fieldErrors: null,
-      fields,
-      formError: `Benutzername oder Passwort falsch`
-    });
-  }
-
-  return createUserSession(user.id, redirectToUrl);
-};
+  return json({ message: null });
+}
 
 export default function Login() {
   const [searchParams] = useSearchParams();
   const navigation = useNavigation();
-  const actionData = useActionData<typeof action>();
+  const loaderData = useLoaderData<typeof loader>();
   const submitting = navigation.state === 'submitting';
   const redirectTo = searchParams.get('redirectTo');
   return (
@@ -73,7 +65,6 @@ export default function Login() {
               label="Benutzername"
               autoComplete="username"
               error={undefined}
-              defaultValue={actionData?.fields?.username}
             />
             <FormInput
               id="password"
@@ -83,7 +74,7 @@ export default function Login() {
               autoComplete="current-password"
               error={undefined}
             />
-            <FormError error={actionData?.formError} />
+            <FormError error={loaderData.message} />
             <FormSubmit label="Anmelden" submitting={submitting} />
           </Form>
         </div>

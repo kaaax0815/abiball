@@ -2,20 +2,22 @@ import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
-import { requireLogin } from '~/utils/request.server';
-import { getUser } from '~/utils/session.server';
+import { authenticator } from '~/services/auth.server';
+import { db } from '~/utils/db.server';
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getUser(request);
+export async function loader({ request }: LoaderArgs) {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login?redirectTo=/tickets'
+  });
 
-  if (user === null) {
-    throw requireLogin('/tickets');
-  }
-
-  const tickets = user.tickets;
+  const tickets = await db.ticket.findMany({
+    where: {
+      userId: user.userId
+    }
+  });
 
   return json(tickets);
-};
+}
 
 export default function Tickets() {
   const loaderData = useLoaderData<typeof loader>();

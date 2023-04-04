@@ -5,8 +5,8 @@ import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
-import { badRequest, validateRedirectUrl } from '~/utils/request.server';
-import { createUserSession, register } from '~/utils/session.server';
+import { parseRedirectToFromForm } from '~/utils/redirect.server';
+import { badRequest } from '~/utils/request.server';
 
 function validateFirstname(username: unknown) {
   if (typeof username !== 'string' || username.length < 3) {
@@ -32,7 +32,7 @@ function validatePassword(password: unknown) {
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export async function action({ request }: ActionArgs) {
   const form = await request.formData();
   const firstname = form.get('firstname');
   const lastname = form.get('lastname');
@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  const redirectToUrl = validateRedirectUrl(redirectTo);
+  const redirectToUrl = parseRedirectToFromForm(redirectTo);
 
   const fields = { firstname, lastname, username, password };
 
@@ -84,7 +84,7 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  const user = await register({ firstname, lastname, username, password });
+  /* const user = await register({ firstname, lastname, username, password });
   if (!user) {
     return badRequest({
       fieldErrors: null,
@@ -93,8 +93,10 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  return createUserSession(user.id, redirectToUrl);
-};
+  return createUserSession(user.id, redirectToUrl); */
+
+  return null;
+}
 
 export default function Register() {
   const [searchParams] = useSearchParams();

@@ -1,18 +1,20 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { jsPDF } from 'jspdf';
 
+import { authenticator } from '~/services/auth.server';
 import { generateAztec } from '~/utils/aztec.server';
 import { db } from '~/utils/db.server';
 import { fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
-import { requireUserId } from '~/utils/session.server';
 
 const qrSecret = process.env.QR_SECRET;
 if (!qrSecret) {
   throw new Error('QR_SECRET must be set');
 }
 
-export const loader = async ({ request, params }: LoaderArgs) => {
-  const userId = await requireUserId(request, `/tickets/${params.id}.pdf`);
+export async function loader({ request, params }: LoaderArgs) {
+  const { userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: `/login?redirectTo=/tickets`
+  });
 
   const ticket = await db.ticket.findUnique({
     where: {
@@ -53,7 +55,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   doc.setLineWidth(0.5);
   doc.line(70, 74, 70, 0);
 
-  const logo = await fetchImage(`${getOrigin(request)}/Abiball.png`);
+  const logo = await fetchImage(`${getOrigin(request)}/Abimotto.png`);
   doc.addImage(logo, 'png', 75, 10, 30, 30);
 
   doc.setFontSize(12);
@@ -72,4 +74,4 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       'Content-Type': 'application/pdf'
     }
   });
-};
+}

@@ -12,7 +12,7 @@ This is a Proof-of-Concept for a ticket management system for our prom. It is no
 
 ### Authentication
 
-- Session-based authentication using Cookies
+- Session-based authentication using remix-auth
 
 ### Database
 
