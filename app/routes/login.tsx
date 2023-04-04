@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, Link, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 
@@ -9,11 +9,15 @@ import { authenticator } from '~/services/auth.server';
 import { sessionStorage } from '~/services/session.server';
 import { parseRedirectToFromForm, parseRedirectToFromRequest } from '~/utils/redirect.server';
 
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Anmelden - Abiball' }];
+};
+
 export async function action({ request }: ActionArgs) {
   const clonedRequest = request.clone();
   const formData = await clonedRequest.formData();
   const redirectTo = parseRedirectToFromForm(formData.get('redirectTo'));
-  return await authenticator.authenticate('user-pass', request, {
+  return authenticator.authenticate('user-pass', request, {
     successRedirect: redirectTo,
     failureRedirect: `/login?redirectTo=${redirectTo}`
   });
@@ -59,20 +63,14 @@ export default function Login() {
           </p>
           <Form method="post">
             <input type="hidden" name="redirectTo" value={redirectTo ?? undefined} />
-            <FormInput
-              id="username"
-              name="username"
-              label="Benutzername"
-              autoComplete="username"
-              error={undefined}
-            />
+            <input type="hidden" name="type" value="login" />
+            <FormInput id="username" name="username" label="Benutzername" autoComplete="username" />
             <FormInput
               id="password"
               name="password"
               type="password"
               label="Passwort"
               autoComplete="current-password"
-              error={undefined}
             />
             <FormError error={loaderData.message} />
             <FormSubmit label="Anmelden" submitting={submitting} />

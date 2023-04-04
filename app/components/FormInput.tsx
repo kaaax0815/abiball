@@ -5,7 +5,6 @@ export type FormInputProps = {
   name: string;
   label: string;
   autoComplete: string;
-  error: string | undefined;
   defaultValue?: string;
 };
 
@@ -15,7 +14,6 @@ export default function FormInput({
   name,
   label,
   autoComplete,
-  error,
   defaultValue
 }: FormInputProps) {
   return (
@@ -27,17 +25,9 @@ export default function FormInput({
         id={id}
         name={name}
         autoComplete={autoComplete}
-        className={
-          'text-sm sm:text-base relative w-full border-0 rounded placeholder-gray-400 ring-1 ring-inset ring-gray-300 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 py-2 pr-2 pl-2' +
-          `${error ? ' ring-red-500' : ''}`
-        }
+        className="relative w-full rounded border-0 p-2 text-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-base"
         defaultValue={defaultValue}
       />
-      {error ? (
-        <div className="text-sm text-red-500">
-          <p role="alert">{error}</p>
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -6,11 +6,6 @@ import { generateAztec } from '~/utils/aztec.server';
 import { db } from '~/utils/db.server';
 import { fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
 
-const qrSecret = process.env.QR_SECRET;
-if (!qrSecret) {
-  throw new Error('QR_SECRET must be set');
-}
-
 export async function loader({ request, params }: LoaderArgs) {
   const { userId } = await authenticator.isAuthenticated(request, {
     failureRedirect: `/login?redirectTo=/tickets`

@@ -1,107 +1,45 @@
-import type { ActionArgs } from '@remix-run/node';
-import { Form, useActionData, useNavigation, useSearchParams } from '@remix-run/react';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
+import { Form, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 
 import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
-import { db } from '~/utils/db.server';
-import { parseRedirectToFromForm } from '~/utils/redirect.server';
-import { badRequest } from '~/utils/request.server';
+import { authenticator } from '~/services/auth.server';
+import { sessionStorage } from '~/services/session.server';
+import { parseRedirectToFromForm, parseRedirectToFromRequest } from '~/utils/redirect.server';
 
-function validateFirstname(username: unknown) {
-  if (typeof username !== 'string' || username.length < 3) {
-    return `Vorname muss mindestens 3 Zeichen lang sein`;
-  }
-}
-
-function validateLastname(username: unknown) {
-  if (typeof username !== 'string' || username.length < 3) {
-    return `Nachname muss mindestens 3 Zeichen lang sein`;
-  }
-}
-
-function validateUsername(username: unknown) {
-  if (typeof username !== 'string' || username.length < 3) {
-    return `Benutzername muss mindestens 3 Zeichen lang sein`;
-  }
-}
-
-function validatePassword(password: unknown) {
-  if (typeof password !== 'string' || password.length < 8) {
-    return `Passwort muss mindestens 8 Zeichen lang sein`;
-  }
-}
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Registrieren - Abiball' }];
+};
 
 export async function action({ request }: ActionArgs) {
-  const form = await request.formData();
-  const firstname = form.get('firstname');
-  const lastname = form.get('lastname');
-  const username = form.get('username');
-  const password = form.get('password');
-  const redirectTo = form.get('redirectTo') || '/tickets';
-  if (
-    typeof firstname !== 'string' ||
-    typeof lastname !== 'string' ||
-    typeof username !== 'string' ||
-    typeof password !== 'string' ||
-    typeof redirectTo !== 'string'
-  ) {
-    return badRequest({
-      fieldErrors: null,
-      fields: null,
-      formError: `Ungültiges Formular`
-    });
-  }
-
-  const redirectToUrl = parseRedirectToFromForm(redirectTo);
-
-  const fields = { firstname, lastname, username, password };
-
-  const fieldErrors = {
-    firstname: validateFirstname(firstname),
-    lastname: validateLastname(lastname),
-    username: validateUsername(username),
-    password: validatePassword(password)
-  };
-
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({
-      fieldErrors,
-      fields,
-      formError: null
-    });
-  }
-
-  const userExists = await db.user.findFirst({
-    where: { username }
+  const clonedRequest = request.clone();
+  const formData = await clonedRequest.formData();
+  const redirectTo = parseRedirectToFromForm(formData.get('redirectTo'));
+  return authenticator.authenticate('user-pass', request, {
+    successRedirect: redirectTo,
+    failureRedirect: `/register?redirectTo=${redirectTo}`
   });
+}
 
-  if (userExists) {
-    return badRequest({
-      fieldErrors: null,
-      fields,
-      formError: `Benutzername bereits vergeben`
-    });
+export async function loader({ request }: LoaderArgs) {
+  const redirectTo = parseRedirectToFromRequest(request);
+  await authenticator.isAuthenticated(request, {
+    successRedirect: redirectTo
+  });
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+  const error = session.get(authenticator.sessionErrorKey);
+  if (error?.message) {
+    return json({ message: error.message as string });
   }
-
-  /* const user = await register({ firstname, lastname, username, password });
-  if (!user) {
-    return badRequest({
-      fieldErrors: null,
-      fields,
-      formError: `Registrierung fehlgeschlagen`
-    });
-  }
-
-  return createUserSession(user.id, redirectToUrl); */
-
-  return null;
+  return json({ message: null });
 }
 
 export default function Register() {
   const [searchParams] = useSearchParams();
   const navigation = useNavigation();
-  const actionData = useActionData<typeof action>();
+  const loaderData = useLoaderData<typeof loader>();
   const submitting = navigation.state === 'submitting';
   return (
     <div className="flex h-screen items-center bg-slate-200">
@@ -119,39 +57,18 @@ export default function Register() {
               name="redirectTo"
               value={searchParams.get('redirectTo') ?? undefined}
             />
-            <FormInput
-              id="firstname"
-              name="firstname"
-              label="Vorname"
-              autoComplete="given-name"
-              error={actionData?.fieldErrors?.firstname}
-              defaultValue={actionData?.fields?.firstname}
-            />
-            <FormInput
-              id="lastname"
-              name="lastname"
-              label="Nachname"
-              autoComplete="family-name"
-              error={actionData?.fieldErrors?.lastname}
-              defaultValue={actionData?.fields?.lastname}
-            />
-            <FormInput
-              id="username"
-              name="username"
-              label="Benutzername"
-              autoComplete="username"
-              error={actionData?.fieldErrors?.username}
-              defaultValue={actionData?.fields?.username}
-            />
+            <input type="hidden" name="type" value="register" />
+            <FormInput id="firstname" name="firstname" label="Vorname" autoComplete="given-name" />
+            <FormInput id="lastname" name="lastname" label="Nachname" autoComplete="family-name" />
+            <FormInput id="username" name="username" label="Benutzername" autoComplete="username" />
             <FormInput
               id="password"
               name="password"
               type="password"
               label="Passwort"
               autoComplete="new-password"
-              error={actionData?.fieldErrors?.password}
             />
-            <FormError error={actionData?.formError} />
+            <FormError error={loaderData.message} />
             <FormSubmit label="Registrieren" submitting={submitting} />
           </Form>
         </div>

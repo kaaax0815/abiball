@@ -16,19 +16,16 @@ export const links: LinksFunction = () => [
 ];
 
 export const meta: V2_MetaFunction = () => {
-  return [
-    {
-      charSet: 'utf-8'
-    },
-    { title: 'Abiball' },
-    { name: 'viewport', content: 'width=device-width,initial-scale=1' }
-  ];
+  return [{ title: 'Abiball' }];
 };
 
 export default function App() {
   return (
     <html lang="de">
       <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta charSet="utf-8" />
+        <meta name="description" content="Ticket Management System für unseren Abiball" />
         <Meta />
         <Links />
       </head>

@@ -12,7 +12,10 @@ export async function loader({ request }: LoaderArgs) {
     failureRedirect: '/login?redirectTo=/tickets'
   });
 
-  const user = await db.user.findUnique({ where: { id: userId }, select: { username: true } });
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { firstname: true, lastname: true }
+  });
 
   invariant(user, "User doesn't exist");
 
@@ -23,7 +26,7 @@ export default function Dashboard() {
   const loaderData = useLoaderData<typeof loader>();
   return (
     <>
-      <Navbar username={loaderData.username} />
+      <Navbar username={`${loaderData.firstname} ${loaderData.lastname}`} />
       <Outlet />
     </>
   );
