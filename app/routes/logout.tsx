@@ -4,7 +4,7 @@ import { redirect } from '@remix-run/node';
 import { authenticator } from '~/services/auth.server';
 
 export function action({ request }: ActionArgs) {
-  return authenticator.logout(request, { redirectTo: '/login' });
+  return authenticator.logout(request, { redirectTo: '/' });
 }
 
 export function loader() {

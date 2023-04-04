@@ -26,6 +26,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta charSet="utf-8" />
         <meta name="description" content="Ticket Management System für unseren Abiball" />
+        <meta name="theme-color" content="#1f2937" />
         <Meta />
         <Links />
       </head>

@@ -1,6 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Link, NavLink } from '@remix-run/react';
+import { Form, NavLink } from '@remix-run/react';
 import { Fragment } from 'react';
 
 export type NavbarProps = {
@@ -66,15 +66,17 @@ export default function Navbar({ username }: NavbarProps) {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <Link
-                            to="/logout"
-                            className={
-                              'block px-4 py-2 text-sm text-gray-700' +
-                              `${active ? ' bg-gray-100' : ''}`
-                            }
-                          >
-                            Abmelden
-                          </Link>
+                          <Form action="/logout" method="post">
+                            <button
+                              type="submit"
+                              className={
+                                'block w-full text-left px-2 py-2 text-sm text-gray-700' +
+                                `${active ? ' bg-gray-100' : ''}`
+                              }
+                            >
+                              Abmelden
+                            </button>
+                          </Form>
                         )}
                       </Menu.Item>
                     </Menu.Items>
