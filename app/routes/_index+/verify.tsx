@@ -20,12 +20,15 @@ export async function action({ request }: ActionArgs) {
 
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { email: true }
+    select: { email: true, firstname: true, lastname: true }
   });
 
   invariant(user, "User doesn't exist");
 
-  await sendMail(request, 'verify', user.email);
+  await sendMail(request, 'verify', {
+    address: user.email,
+    name: `${user.firstname} ${user.lastname}`
+  });
 
   return null;
 }

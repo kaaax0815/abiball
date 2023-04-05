@@ -8,7 +8,11 @@ import { dateToUnix } from './time.server';
 
 export type MailMethods = 'verify' | 'reset-password' | 'welcome';
 
-export async function sendMail(request: Request, method: MailMethods, to: string) {
+export async function sendMail(
+  request: Request,
+  method: MailMethods,
+  to: { name: string; address: string }
+) {
   const origin = getOrigin(request);
   switch (method) {
     case 'verify': {
@@ -18,7 +22,10 @@ export async function sendMail(request: Request, method: MailMethods, to: string
           name: 'Abiball',
           address: loadEmailSender()
         },
-        to,
+        to: {
+          name: to.name,
+          address: to.address
+        },
         subject: 'Abiball: Verifiziere deine E-Mail-Adresse',
         html: verifyTemplate({
           origin: origin,
@@ -31,9 +38,9 @@ export async function sendMail(request: Request, method: MailMethods, to: string
   }
 }
 
-export function createVerifyToken(email: string) {
+export function createVerifyToken(to: { name: string; address: string }) {
   const payload = {
-    email,
+    email: to.address,
     type: 'verify',
     // 15 minutes
     exp: dateToUnix(new Date(Date.now() + 1000 * 60 * 15))
