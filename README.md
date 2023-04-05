@@ -26,6 +26,10 @@ This is a Proof-of-Concept for a ticket management system for our prom. It is no
 - Payload is compressed via MessagePack
 - Signing is done using HS256
 
+### Email
+
+- Emails are sent using sendinblue
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
