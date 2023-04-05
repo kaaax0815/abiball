@@ -36,7 +36,7 @@ export default function Tickets() {
           <li key={ticket.id} className="my-5">
             <Link
               reloadDocument
-              to={`/ticket/${ticket.id}.pdf`}
+              to={`/tickets/${ticket.id}.pdf`}
               className="rounded-sm bg-slate-500 p-2"
             >
               {ticket.firstname} {ticket.lastname}
@@ -44,7 +44,7 @@ export default function Tickets() {
           </li>
         ))}
       </ul>
-      <Link to="/ticket/buy" className="mt-5 rounded-md bg-indigo-400 p-3 text-white">
+      <Link to="/tickets/buy" className="mt-5 rounded-md bg-indigo-400 p-3 text-white">
         Ticket kaufen
       </Link>
     </main>
