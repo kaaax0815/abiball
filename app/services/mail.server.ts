@@ -24,5 +24,3 @@ export const transporter = nodemailer.createTransport(
   returnBasedOnEnv({ prod: new Transport({ apiKey: sendinblueKey }), dev: etherealConfig })
 ) as HbsTransporter;
 transporter.use('compile', handlebars);
-
-export const getTestMessageUrl = nodemailer.getTestMessageUrl;

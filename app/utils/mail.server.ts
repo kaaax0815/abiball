@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { getTestMessageUrl, transporter } from '~/services/mail.server';
+import { transporter } from '~/services/mail.server';
 
 import { getOrigin } from './request.server';
 import { dateToUnix } from './time.server';
@@ -23,10 +23,6 @@ export async function sendMail(request: Request, method: MailMethods, to: string
           type_of_action: 'VERIFY'
         }
       });
-      const testUrl = getTestMessageUrl(mail);
-      if (testUrl) {
-        console.log(`Preview URL: ${testUrl}`);
-      }
       return mail;
     }
   }
