@@ -43,8 +43,8 @@ export default function Login() {
   const submitting = navigation.state === 'submitting';
   const redirectTo = searchParams.get('redirectTo');
   return (
-    <div className="flex h-screen items-center bg-slate-200">
-      <main className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
+    <main className="flex items-center bg-slate-200">
+      <div className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Anmelden
@@ -76,7 +76,7 @@ export default function Login() {
             <FormSubmit label="Anmelden" submitting={submitting} />
           </Form>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

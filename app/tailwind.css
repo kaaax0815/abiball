@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+nav {
+  max-height: 4rem;
+}
+
+main {
+  min-height: calc(100vh - 4rem);
+}
+
 @font-face {
   font-display: swap;
   font-family: 'Inter';

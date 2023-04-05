@@ -42,8 +42,8 @@ export default function Register() {
   const loaderData = useLoaderData<typeof loader>();
   const submitting = navigation.state === 'submitting';
   return (
-    <div className="flex h-screen items-center bg-slate-200">
-      <main className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
+    <main className="flex items-center bg-slate-200">
+      <div className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
             Registrieren
@@ -72,7 +72,7 @@ export default function Register() {
             <FormSubmit label="Registrieren" submitting={submitting} />
           </Form>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
