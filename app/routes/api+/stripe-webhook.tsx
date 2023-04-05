@@ -1,9 +1,10 @@
 import type { ActionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 
-import { loadStripeWebhookSecret, stripe } from '~/services/stripe.server';
+import { stripe } from '~/services/stripe.server';
 import { notFound } from '~/utils/request.server';
 import type { DiscriminatedEvent } from '~/utils/stripe.server';
+import { loadStripeWebhookSecret } from '~/utils/stripe.server';
 import { handleCheckoutSessionCompleted } from '~/utils/stripe.server';
 
 export async function action({ request }: ActionArgs) {
