@@ -55,6 +55,7 @@ export async function loader({ request }: LoaderArgs) {
   if (!verified) {
     return redirect('/verify');
   }
+  return null;
 }
 
 export default function Buy() {

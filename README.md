@@ -30,6 +30,10 @@ This is a Proof-of-Concept for a ticket management system for our prom. It is no
 
 - Emails are sent using sendinblue
 
+### Payment
+
+- Payments are handled by stripe
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
