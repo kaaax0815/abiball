@@ -20,3 +20,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export { db };
+
+export async function isVerified(userId: string) {
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { verified: true }
+  });
+  return user?.verified ?? false;
+}

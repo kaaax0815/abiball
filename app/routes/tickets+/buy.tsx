@@ -1,4 +1,4 @@
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
@@ -7,7 +7,7 @@ import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
-import { db } from '~/utils/db.server';
+import { db, isVerified } from '~/utils/db.server';
 import { badRequest, getOrigin } from '~/utils/request.server';
 import { createStripeSession } from '~/utils/stripe.server';
 
@@ -45,6 +45,16 @@ export async function action({ request }: ActionArgs) {
   }
 
   return redirect(session.url);
+}
+
+export async function loader({ request }: LoaderArgs) {
+  const { userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login?redirectTo=/tickets/buy'
+  });
+  const verified = await isVerified(userId);
+  if (!verified) {
+    return redirect('/verify');
+  }
 }
 
 export default function Buy() {

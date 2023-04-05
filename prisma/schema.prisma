@@ -29,4 +29,5 @@ model User {
   lastname     String
   passwordHash String
   tickets      Ticket[]
+  verified     Boolean  @default(false)
 }

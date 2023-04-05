@@ -1,5 +1,5 @@
 const DEFAULT_REDIRECT_URL = '/tickets';
-const ALLOWED_URLS = ['/tickets', '/'];
+const ALLOWED_URLS = ['/tickets', '/', '/tickets/buy'];
 
 export function parseRedirect(url: string) {
   if (ALLOWED_URLS.includes(url)) {

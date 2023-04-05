@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { AuthorizationError } from 'remix-auth';
 
+import { authenticator } from '~/services/auth.server';
+
 import { db } from './db.server';
 import {
   validateEmail,
