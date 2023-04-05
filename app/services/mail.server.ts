@@ -1,10 +1,7 @@
 import nodemailer from 'nodemailer';
-import type { HbsTransporter } from 'nodemailer-express-handlebars';
 import Transport from 'nodemailer-sendinblue-transport';
 
 import { returnBasedOnEnv } from '~/utils/debug.server';
-
-import { handlebars } from '../utils/handlebars.server';
 
 const sendinblueKey = process.env.SENDINBLUE_KEY;
 if (!sendinblueKey) {
@@ -22,5 +19,4 @@ const etherealConfig = {
 
 export const transporter = nodemailer.createTransport(
   returnBasedOnEnv({ prod: new Transport({ apiKey: sendinblueKey }), dev: etherealConfig })
-) as HbsTransporter;
-transporter.use('compile', handlebars);
+);

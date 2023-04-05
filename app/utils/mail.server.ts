@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 import { transporter } from '~/services/mail.server';
+import verifyTemplate from '~/views/verify.server';
 
 import { getOrigin } from './request.server';
 import { dateToUnix } from './time.server';
@@ -15,13 +16,11 @@ export async function sendMail(request: Request, method: MailMethods, to: string
       const mail = await transporter.sendMail({
         to,
         subject: 'Abiball: Verifiziere deine E-Mail-Adresse',
-        template: 'verify',
-        context: {
+        html: verifyTemplate({
           origin: origin,
           logo: `${origin}/Abimotto.png`,
-          verify_url: `${origin}/api/mail?token=${verifyToken}`,
-          type_of_action: 'VERIFY'
-        }
+          verify_url: `${origin}/api/mail?token=${verifyToken}`
+        })
       });
       return mail;
     }
