@@ -7,6 +7,7 @@ import { getOrigin } from './request.server';
 import { dateToUnix } from './time.server';
 
 export type MailMethods = 'verify' | 'reset-password' | 'welcome';
+export const DEFAULT_SENDER = `Abiball <${process.env.SENDINBLUE_SENDER}>`;
 
 export async function sendMail(request: Request, method: MailMethods, to: string) {
   const origin = getOrigin(request);
@@ -14,6 +15,7 @@ export async function sendMail(request: Request, method: MailMethods, to: string
     case 'verify': {
       const verifyToken = createVerifyToken(to);
       const mail = await transporter.sendMail({
+        from: DEFAULT_SENDER,
         to,
         subject: 'Abiball: Verifiziere deine E-Mail-Adresse',
         html: verifyTemplate({

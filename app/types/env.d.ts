@@ -9,6 +9,7 @@ declare global {
       STRIPE_WEBHOOK_SECRET: string | undefined;
       STRIPE_TICKET_ID: string | undefined;
       SENDINBLUE_KEY: string | undefined;
+      SENDINBLUE_SENDER: string | undefined;
       ETHEREAL_MAIL: string | undefined;
       ETHEREAL_PASSWORD: string | undefined;
     }
