@@ -39,7 +39,7 @@ export default function Tickets() {
               to={`/ticket/${ticket.id}.pdf`}
               className="rounded-sm bg-slate-500 p-2"
             >
-              {ticket.firstName} {ticket.lastName}
+              {ticket.firstname} {ticket.lastname}
             </Link>
           </li>
         ))}

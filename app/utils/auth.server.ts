@@ -3,25 +3,25 @@ import { AuthorizationError } from 'remix-auth';
 
 import { db } from './db.server';
 import {
+  validateEmail,
   validateFirstname,
   validateLastname,
-  validatePassword,
-  validateUsername
+  validatePassword
 } from './validation.server';
 
-export async function login(username: string, password: string) {
+export async function login(email: string, password: string) {
   const user = await db.user.findUnique({
-    where: { username }
+    where: { email }
   });
 
   if (!user) {
-    throw new AuthorizationError('Benutzername oder Passwort falsch');
+    throw new AuthorizationError('Email-Adresse oder Passwort falsch');
   }
 
   const isCorrectPassword = await bcrypt.compare(password, user.passwordHash);
 
   if (!isCorrectPassword) {
-    throw new AuthorizationError('Benutzername oder Passwort falsch');
+    throw new AuthorizationError('Email-Adresse oder Passwort falsch');
   }
 
   return { userId: user.id };
@@ -30,18 +30,18 @@ export async function login(username: string, password: string) {
 export async function register(
   firstname: string,
   lastname: string,
-  username: string,
+  email: string,
   password: string
 ) {
   validateFirstname(firstname);
   validateLastname(lastname);
-  await validateUsername(username);
+  await validateEmail(email);
   validatePassword(password);
   const user = await db.user.create({
     data: {
       firstname,
       lastname,
-      username,
+      email,
       passwordHash: await bcrypt.hash(password, 10)
     }
   });

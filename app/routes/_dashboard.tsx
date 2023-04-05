@@ -26,7 +26,7 @@ export default function Dashboard() {
   const loaderData = useLoaderData<typeof loader>();
   return (
     <>
-      <Navbar username={`${loaderData.firstname} ${loaderData.lastname}`} />
+      <Navbar menuTitle={`${loaderData.firstname} ${loaderData.lastname}`} />
       <Outlet />
     </>
   );

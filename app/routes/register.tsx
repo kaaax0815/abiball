@@ -60,7 +60,7 @@ export default function Register() {
             <input type="hidden" name="type" value="register" />
             <FormInput id="firstname" name="firstname" label="Vorname" autoComplete="given-name" />
             <FormInput id="lastname" name="lastname" label="Nachname" autoComplete="family-name" />
-            <FormInput id="username" name="username" label="Benutzername" autoComplete="username" />
+            <FormInput id="email" name="email" label="Email-Adresse" autoComplete="email" />
             <FormInput
               id="password"
               name="password"

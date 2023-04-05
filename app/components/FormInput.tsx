@@ -4,9 +4,20 @@ export type FormInputProps = {
   type?: React.HTMLInputTypeAttribute;
   name: string;
   label: string;
-  autoComplete: string;
+  autoComplete: AutoComplete;
   defaultValue?: string;
 };
+
+/** @author <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete> */
+export type AutoComplete =
+  | 'on'
+  | 'name'
+  | 'given-name'
+  | 'family-name'
+  | 'email'
+  | 'username'
+  | 'new-password'
+  | 'current-password';
 
 export default function FormInput({
   id,

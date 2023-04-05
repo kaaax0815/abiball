@@ -4,12 +4,12 @@ import { Form, NavLink } from '@remix-run/react';
 import { Fragment } from 'react';
 
 export type NavbarProps = {
-  username: string;
+  menuTitle: string;
 };
 
 const navigation = [{ name: 'Tickets', to: '/tickets' }];
 
-export default function Navbar({ username }: NavbarProps) {
+export default function Navbar({ menuTitle }: NavbarProps) {
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -51,7 +51,7 @@ export default function Navbar({ username }: NavbarProps) {
                   <div>
                     <Menu.Button className="flex rounded-md bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Benutzermenü öffnen</span>
-                      <span className="px-3 py-2 text-white">{username}</span>
+                      <span className="px-3 py-2 text-white">{menuTitle}</span>
                     </Menu.Button>
                   </div>
                   <Transition

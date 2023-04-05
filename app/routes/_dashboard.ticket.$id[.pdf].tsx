@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderArgs) {
 
   doc.setFont('courier', 'bold');
   doc.setFontSize(18);
-  doc.text(ticket.firstName + ' ' + ticket.lastName, 10, 50, {
+  doc.text(ticket.firstname + ' ' + ticket.lastname, 10, 50, {
     maxWidth: 60
   });
   doc.setFont('courier', 'normal');

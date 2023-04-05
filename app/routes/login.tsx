@@ -64,7 +64,7 @@ export default function Login() {
           <Form method="post">
             <input type="hidden" name="redirectTo" value={redirectTo ?? undefined} />
             <input type="hidden" name="type" value="login" />
-            <FormInput id="username" name="username" label="Benutzername" autoComplete="username" />
+            <FormInput id="email" name="email" label="Email-Adresse" autoComplete="email" />
             <FormInput
               id="password"
               name="password"

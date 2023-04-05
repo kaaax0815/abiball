@@ -6,18 +6,18 @@ async function seed() {
     data: {
       firstname: 'Kody',
       lastname: 'Baker',
-      username: 'kody',
+      email: 'kody@test.com',
       passwordHash: '$2y$10$efzH6cGv7oz787zbvleZDOsEYZUuZ0DJlsnE3f9veQHY8qDlf/ck6'
     }
   });
 
   const kodyTicket = await db.ticket.create({
     data: {
-      firstName: 'Kody',
-      lastName: 'Baker',
+      firstname: 'Kody',
+      lastname: 'Baker',
       owner: {
         connect: {
-          username: 'kody'
+          id: kody.id
         }
       }
     }
@@ -25,11 +25,11 @@ async function seed() {
 
   const aliceTicket = await db.ticket.create({
     data: {
-      firstName: 'Alice',
-      lastName: 'Baker',
+      firstname: 'Alice',
+      lastname: 'Baker',
       owner: {
         connect: {
-          username: 'kody'
+          id: kody.id
         }
       }
     }

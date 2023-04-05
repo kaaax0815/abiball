@@ -15,32 +15,32 @@ authenticator.use(
     const type = form.get('type');
     switch (type) {
       case 'login': {
-        const username = form.get('username');
+        const email = form.get('email');
         const password = form.get('password');
 
-        if (typeof username !== 'string' || typeof password !== 'string') {
+        if (typeof email !== 'string' || typeof password !== 'string') {
           throw new AuthorizationError('Ungültiges Formular');
         }
 
-        const user = await login(username, password);
+        const user = await login(email, password);
         return user;
       }
       case 'register': {
         const firstname = form.get('firstname');
         const lastname = form.get('lastname');
-        const username = form.get('username');
+        const email = form.get('email');
         const password = form.get('password');
 
         if (
           typeof firstname !== 'string' ||
           typeof lastname !== 'string' ||
-          typeof username !== 'string' ||
+          typeof email !== 'string' ||
           typeof password !== 'string'
         ) {
           throw new AuthorizationError('Ungültiges Formular');
         }
 
-        const user = await register(firstname, lastname, username, password);
+        const user = await register(firstname, lastname, email, password);
         return user;
       }
       default:

@@ -3,6 +3,7 @@ import { json } from '@remix-run/node';
 
 import { loadStripeWebhookSecret, stripe } from '~/services/stripe.server';
 import { notFound } from '~/utils/request.server';
+import type { DiscriminatedEvent } from '~/utils/stripe.server';
 import { handleCheckoutSessionCompleted } from '~/utils/stripe.server';
 
 export async function action({ request }: ActionArgs) {
@@ -12,7 +13,11 @@ export async function action({ request }: ActionArgs) {
     throw json({ errors: [{ message: 'Missing Signature' }] }, 400);
   }
   try {
-    const event = stripe.webhooks.constructEvent(payload, sig, loadStripeWebhookSecret());
+    const event = stripe.webhooks.constructEvent(
+      payload,
+      sig,
+      loadStripeWebhookSecret()
+    ) as DiscriminatedEvent;
     switch (event.type) {
       case 'checkout.session.completed': {
         await handleCheckoutSessionCompleted(event);

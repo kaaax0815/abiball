@@ -16,15 +16,15 @@ model Ticket {
   updatedAt DateTime @updatedAt
   owner     User     @relation(fields: [userId], references: [id])
   userId    String
-  firstName String
-  lastName  String
+  firstname String
+  lastname  String
 }
 
 model User {
   id           String   @id @default(uuid())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  username     String   @unique
+  email        String   @unique
   firstname    String
   lastname     String
   passwordHash String

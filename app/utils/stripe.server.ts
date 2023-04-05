@@ -1,8 +1,12 @@
-import type Stripe from 'stripe';
+// Strongly type Stripe Events
+/// <reference types="stripe-event-types" />
+import type { Stripe } from 'stripe';
 
 import { db } from './db.server';
 
-export async function handleCheckoutSessionCompleted(event: Stripe.Event) {
+export type DiscriminatedEvent = Stripe.DiscriminatedEvent;
+
+export async function handleCheckoutSessionCompleted(event: Stripe.DiscriminatedEvent) {
   if (event.type !== 'checkout.session.completed') {
     return;
   }
@@ -35,8 +39,8 @@ export async function handleCheckoutSessionCompleted(event: Stripe.Event) {
           id: userId
         }
       },
-      firstName: firstname,
-      lastName: lastname
+      firstname,
+      lastname
     }
   });
 
