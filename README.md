@@ -22,8 +22,7 @@ This is a Proof-of-Concept for a ticket management system for our prom. It is no
 ### Ticket Generation
 
 - Tickets are generated using jsPDF
-- QR codes are generated using bwip-js
-- QR codes are aztec codes with a custom jwt implementation as payload
+- Aztec codes are generated using bwip-js with a custom jwt implementation as payload
 - Payload is compressed via MessagePack
 - Signing is done using HS256
 

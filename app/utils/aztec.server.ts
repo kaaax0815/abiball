@@ -52,7 +52,7 @@ export function verifySignature(data: string, signature: string) {
   const decodedData = decodeBase64UrlToString(data);
   const decodedSignature = decodeBase64UrlToString(signature);
   return (
-    crypto.createHmac('sha256', loadQRSecret()).update(decodedData).digest('base64url') ===
+    crypto.createHmac('sha256', loadAztecSecret()).update(decodedData).digest('base64url') ===
     decodedSignature
   );
 }
@@ -91,7 +91,7 @@ export function encodeData(header: Record<string, string>, payload: Uint8Array) 
 }
 
 export function generateSignature(data: string) {
-  return crypto.createHmac('sha256', loadQRSecret()).update(data).digest('base64url');
+  return crypto.createHmac('sha256', loadAztecSecret()).update(data).digest('base64url');
 }
 
 export function encodeContent(data: string, signature: string) {
@@ -114,10 +114,10 @@ export function decodeBase64UrlToObject(data: string): Record<string, string> {
   return JSON.parse(decodeBase64UrlToString(data));
 }
 
-export function loadQRSecret() {
-  const qrSecret = process.env.QR_SECRET;
-  if (!qrSecret) {
-    throw new Error('QR_SECRET must be set');
+export function loadAztecSecret() {
+  const aztecSecret = process.env.AZTEC_SECRET;
+  if (!aztecSecret) {
+    throw new Error('AZTEC_SECRET must be set');
   }
-  return qrSecret;
+  return aztecSecret;
 }
