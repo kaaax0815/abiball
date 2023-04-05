@@ -2,7 +2,7 @@ import type { LoaderArgs } from '@remix-run/node';
 import { jsPDF } from 'jspdf';
 
 import { authenticator } from '~/services/auth.server';
-import { generateAztec } from '~/utils/aztec.server';
+import { generateAztec } from '~/services/aztec.server';
 import { db } from '~/utils/db.server';
 import { fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
 

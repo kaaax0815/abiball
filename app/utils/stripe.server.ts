@@ -49,9 +49,9 @@ export async function handleCheckoutSessionCompleted(
 }
 
 export function loadStripeWebhookSecret() {
-  const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET;
+  const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!stripeWebhookSecret) {
-    throw new Error('STRIPE_WEBHOOK_ENDPOINT_SECRET must be set');
+    throw new Error('STRIPE_WEBHOOK_SECRET must be set');
   }
   return stripeWebhookSecret;
 }
