@@ -1,7 +1,6 @@
-import type { LoaderArgs } from '@remix-run/node';
+import type { LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import type { V2_MetaFunction } from '@remix-run/react';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { authenticator } from '~/services/auth.server';

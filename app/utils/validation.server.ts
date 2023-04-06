@@ -31,18 +31,18 @@ export async function validateEmail(email: string) {
 
 export function validateFirstname(firstname: string) {
   if (firstname.length < 3) {
-    return `Vorname muss mindestens 3 Zeichen lang sein`;
+    throw new AuthorizationError(`Vorname muss mindestens 3 Zeichen lang sein`);
   }
 }
 
 export function validateLastname(lastname: string) {
   if (lastname.length < 3) {
-    return `Nachname muss mindestens 3 Zeichen lang sein`;
+    throw new AuthorizationError(`Nachname muss mindestens 3 Zeichen lang sein`);
   }
 }
 
 export function validatePassword(password: string) {
   if (password.length < 8) {
-    return `Passwort muss mindestens 8 Zeichen lang sein`;
+    throw new AuthorizationError(`Passwort muss mindestens 8 Zeichen lang sein`);
   }
 }

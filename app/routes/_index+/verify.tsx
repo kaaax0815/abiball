@@ -1,4 +1,5 @@
-import type { ActionArgs } from '@remix-run/node';
+import { InboxArrowDownIcon } from '@heroicons/react/24/outline';
+import type { ActionArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
@@ -7,6 +8,10 @@ import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Verifizieren - Abiball' }];
+};
 
 export async function action({ request }: ActionArgs) {
   const { userId } = await authenticator.isAuthenticated(request, {
@@ -50,7 +55,7 @@ export default function Verify() {
             Wir schicken dir eine Email mit einem Link
           </p>
           <Form method="post">
-            <FormSubmit label="Email schicken" submitting={submitting} />
+            <FormSubmit label="Email schicken" submitting={submitting} Icon={InboxArrowDownIcon} />
           </Form>
         </div>
       </div>

@@ -47,10 +47,6 @@ export function generatePayload(ticket: Ticket) {
   const payload = {
     id: ticket.id,
     owner: ticket.userId,
-    firstname: ticket.firstname,
-    lastname: ticket.lastname,
-    createdAt: dateToUnix(ticket.createdAt),
-    updatedAt: dateToUnix(ticket.updatedAt),
     generatedAt: dateToUnix(new Date())
   };
 

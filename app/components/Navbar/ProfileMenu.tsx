@@ -1,4 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
+import { ArrowLeftOnRectangleIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Form, Link } from '@remix-run/react';
 import { Fragment } from 'react';
 
@@ -40,6 +41,21 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
               <Menu.Item>
                 {({ active }) => (
+                  <Link
+                    to="/profile"
+                    className={
+                      'block w-full text-left px-2 py-2 text-sm text-gray-700' +
+                      `${active ? ' bg-gray-100' : ''}`
+                    }
+                  >
+                    <span>
+                      <UserIcon className="inline-block h-6 w-6" /> Profil
+                    </span>
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
                   <Form action="/logout" method="post">
                     <button
                       type="submit"
@@ -48,7 +64,9 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
                         `${active ? ' bg-gray-100' : ''}`
                       }
                     >
-                      Abmelden
+                      <span>
+                        <ArrowLeftOnRectangleIcon className="inline-block h-6 w-6" /> Abmelden
+                      </span>
                     </button>
                   </Form>
                 )}

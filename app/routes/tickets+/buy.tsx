@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
@@ -10,6 +10,12 @@ import { authenticator } from '~/services/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 import { badRequest, getOrigin } from '~/utils/request.server';
 import { createStripeSession } from '~/utils/stripe.server';
+
+export const meta: V2_MetaFunction = () => [
+  {
+    title: 'Kaufen - Abiball'
+  }
+];
 
 export async function action({ request }: ActionArgs) {
   const { userId } = await authenticator.isAuthenticated(request, {
