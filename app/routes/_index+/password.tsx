@@ -65,16 +65,16 @@ export default function Password() {
       <div className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Neues Password
+            Neues Passwort
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Setze ein neues Password wenn du deines vergessen hast
+            Setze ein neues Passwort wenn du deines vergessen hast
           </p>
           <Form method="post">
             <FormInput
               id="password"
               name="password"
-              label="Password"
+              label="Passwort"
               type="password"
               autoComplete="new-password"
             />

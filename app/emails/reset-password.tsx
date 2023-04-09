@@ -33,10 +33,10 @@ export function ResetPassword({
         <Container>
           <Img src={logoUrl} alt="Logo" height={150} width={327} style={logo} />
           <Heading>Setze ein neues Passwort</Heading>
-          <Text>Klicke auf den Button um ein neues Password zu setzen.</Text>
+          <Text>Klicke auf den Button um ein neues Passwort zu setzen.</Text>
           <Section style={btnSection}>
             <Button pX={12} pY={12} style={button} href={resetUrl}>
-              Neues Password setzen
+              Neues Passwort setzen
             </Button>
           </Section>
           <Text style={text}>
@@ -47,8 +47,7 @@ export function ResetPassword({
           </Section>
           <Text style={text}>
             Wenn du dich nicht bei uns registriert hast, kannst du diese Email einfach ignorieren.
-            Wenn du dein Password nicht zurücksetzen möchtest, kannst du diese Email auch
-            ignorieren.
+            Wenn du dein Passwort nicht zurücksetzen möchtest, kannst du diese Email einfach ignorieren.
           </Text>
           <Text style={text}>
             Grüße,
