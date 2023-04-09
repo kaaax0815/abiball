@@ -2,7 +2,7 @@ import { AuthorizationError } from 'remix-auth';
 
 import { db } from './db.server';
 
-export async function validateEmail(email: string) {
+export function validateEmail(email: string) {
   if (email.length < 3) {
     throw new AuthorizationError('Email-Adresse muss mindestens 3 Zeichen lang sein');
   }
@@ -19,7 +19,9 @@ export async function validateEmail(email: string) {
   if (domainName.length < 1 || domainExtension.length < 2) {
     throw new AuthorizationError('Ungültige Email-Adresse');
   }
+}
 
+export async function emailAlreadyExists(email: string) {
   const user = await db.user.findUnique({
     where: { email }
   });

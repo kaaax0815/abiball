@@ -1,10 +1,9 @@
 import bcrypt from 'bcryptjs';
 import { AuthorizationError } from 'remix-auth';
 
-import { authenticator } from '~/services/auth.server';
-
 import { db } from './db.server';
 import {
+  emailAlreadyExists,
   validateEmail,
   validateFirstname,
   validateLastname,
@@ -37,7 +36,8 @@ export async function register(
 ) {
   validateFirstname(firstname);
   validateLastname(lastname);
-  await validateEmail(email);
+  validateEmail(email);
+  await emailAlreadyExists(email);
   validatePassword(password);
   const user = await db.user.create({
     data: {

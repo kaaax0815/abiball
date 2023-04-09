@@ -72,6 +72,9 @@ export default function Login() {
               label="Passwort"
               autoComplete="current-password"
             />
+            <Link to="/forgot" className="text-sm font-medium hover:underline">
+              Passwort vergessen?
+            </Link>
             <FormError error={loaderData.message} />
             <FormSubmit label="Anmelden" submitting={submitting} />
           </Form>
