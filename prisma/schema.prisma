@@ -30,4 +30,5 @@ model User {
   passwordHash String
   tickets      Ticket[]
   verified     Boolean  @default(false)
+  admin        Boolean  @default(false)
 }

@@ -7,6 +7,8 @@ async function seed() {
       firstname: 'Kody',
       lastname: 'Baker',
       email: 'kody@test.com',
+      admin: true,
+      verified: true,
       passwordHash: '$2y$10$efzH6cGv7oz787zbvleZDOsEYZUuZ0DJlsnE3f9veQHY8qDlf/ck6'
     }
   });

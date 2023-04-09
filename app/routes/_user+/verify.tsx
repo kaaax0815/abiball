@@ -1,5 +1,5 @@
 import { InboxArrowDownIcon } from '@heroicons/react/24/outline';
-import type { ActionArgs, V2_MetaFunction } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
@@ -36,6 +36,18 @@ export async function action({ request }: ActionArgs) {
   });
 
   return null;
+}
+
+export async function loader({ request }: LoaderArgs) {
+  const { userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login?redirectTo=/verify'
+  });
+
+  const verified = await isVerified(userId);
+
+  if (verified) {
+    throw redirect('/tickets');
+  }
 }
 
 export default function Verify() {
