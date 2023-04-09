@@ -1,4 +1,9 @@
+import type { V2_MetaFunction } from '@remix-run/react';
 import { Link } from '@remix-run/react';
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Abiball' }];
+};
 
 export default function Index() {
   return (
