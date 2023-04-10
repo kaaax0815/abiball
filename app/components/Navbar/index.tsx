@@ -3,11 +3,10 @@ import { Disclosure } from '@headlessui/react';
 import DesktopNavigation from './DesktopNavigation';
 import Logo from './Logo';
 import MobileNavigation from './MobileNavigation';
+import type { ProfileMenuProps } from './ProfileMenu';
 import ProfileMenu from './ProfileMenu';
 
-export type NavbarProps = {
-  user: { firstname: string; lastname: string } | null;
-};
+export type NavbarProps = ProfileMenuProps;
 
 const navigation = [{ name: 'Tickets', to: '/tickets' }];
 

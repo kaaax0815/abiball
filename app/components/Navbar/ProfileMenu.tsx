@@ -1,10 +1,14 @@
 import { Menu, Transition } from '@headlessui/react';
-import { ArrowLeftOnRectangleIcon, UserIcon } from '@heroicons/react/24/outline';
+import {
+  AdjustmentsHorizontalIcon,
+  ArrowLeftOnRectangleIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
 import { Form, Link, NavLink } from '@remix-run/react';
 import { Fragment } from 'react';
 
 export type ProfileMenuProps = {
-  user: { firstname: string; lastname: string } | null;
+  user: { firstname: string; lastname: string; admin: boolean } | null;
 };
 
 export default function ProfileMenu({ user }: ProfileMenuProps) {
@@ -71,6 +75,23 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
                   </Form>
                 )}
               </Menu.Item>
+              {user.admin && (
+                <Menu.Item>
+                  {({ active }) => (
+                    <NavLink
+                      to="/admin"
+                      className={
+                        'block w-full text-left px-2 py-2 text-sm text-red-700 aria-active:bg-gray-200' +
+                        `${active ? ' bg-gray-100' : ''}`
+                      }
+                    >
+                      <span>
+                        <AdjustmentsHorizontalIcon className="inline-block h-6 w-6" /> Admin
+                      </span>
+                    </NavLink>
+                  )}
+                </Menu.Item>
+              )}
             </Menu.Items>
           </Transition>
         </Menu>

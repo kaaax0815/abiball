@@ -15,7 +15,7 @@ export async function loader({ request }: LoaderArgs) {
 
   const user = await db.user.findUnique({
     where: { id: userData.userId },
-    select: { firstname: true, lastname: true }
+    select: { firstname: true, lastname: true, admin: true }
   });
 
   return json(user);
