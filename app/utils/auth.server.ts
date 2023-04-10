@@ -1,9 +1,12 @@
+import { redirect } from '@remix-run/node';
 import bcrypt from 'bcryptjs';
 import { AuthorizationError } from 'remix-auth';
 
 import { authenticator } from '~/services/auth.server';
 
-import { db } from './db.server';
+import { db, isAdmin, isVerified } from './db.server';
+import type { ALLOWED_URLS } from './redirect.server';
+import { DEFAULT_REDIRECT_URL } from './redirect.server';
 import {
   emailAlreadyExists,
   validateEmail,
@@ -53,8 +56,51 @@ export async function register(
   return { userId: user.id };
 }
 
-export async function invalidateSession(request: Request) {
+export async function invalidateSession(
+  request: Request,
+  redirectTo: string = DEFAULT_REDIRECT_URL
+) {
   throw await authenticator.logout(request, {
-    redirectTo: '/login'
+    redirectTo: `/login?redirectTo=${redirectTo}`
   });
+}
+
+export async function isAuthenticated(
+  request: Request,
+  {
+    redirectTo = DEFAULT_REDIRECT_URL,
+    checkVerified = false,
+    checkAdmin = false
+  }: {
+    redirectTo?: (typeof ALLOWED_URLS)[number];
+    checkVerified?: boolean;
+    checkAdmin?: boolean;
+  }
+) {
+  let verified: boolean | null = null;
+  let admin: boolean | null = null;
+
+  const { userId } = await authenticator.isAuthenticated(request, {
+    failureRedirect: `/login?redirectTo=${redirectTo}`
+  });
+
+  if (checkVerified) {
+    verified = await isVerified(userId);
+    if (verified === false) {
+      throw redirect('/verify');
+    } else if (verified === null) {
+      throw await invalidateSession(request, redirectTo);
+    }
+  }
+
+  if (checkAdmin) {
+    admin = await isAdmin(userId);
+    if (admin === false) {
+      throw redirect('/');
+    } else if (admin === null) {
+      throw await invalidateSession(request, redirectTo);
+    }
+  }
+
+  return { userId, admin, verified };
 }

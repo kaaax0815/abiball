@@ -1,14 +1,15 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { jsPDF } from 'jspdf';
 
-import { authenticator } from '~/services/auth.server';
 import { generateAztec } from '~/services/aztec.server';
+import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
 
 export async function loader({ request, params }: LoaderArgs) {
-  const { userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: `/login?redirectTo=/tickets`
+  const { userId } = await isAuthenticated(request, {
+    redirectTo: '/tickets',
+    checkVerified: true
   });
 
   const ticket = await db.ticket.findUnique({

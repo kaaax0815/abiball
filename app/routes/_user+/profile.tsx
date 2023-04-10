@@ -7,8 +7,7 @@ import invariant from 'tiny-invariant';
 import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
-import { authenticator } from '~/services/auth.server';
-import { invalidateSession } from '~/utils/auth.server';
+import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest } from '~/utils/request.server';
 import { validateLastname } from '~/utils/validation.server';
@@ -21,8 +20,9 @@ export const meta: V2_MetaFunction = () => {
 export async function action({ request }: ActionArgs) {
   const clonedRequest = request.clone();
 
-  const { userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login?redirectTo=/profile'
+  const { userId } = await isAuthenticated(request, {
+    redirectTo: '/profile',
+    checkVerified: true
   });
 
   const form = await clonedRequest.formData();
@@ -54,8 +54,9 @@ export async function action({ request }: ActionArgs) {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const { userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login?redirectTo=/profile'
+  const { userId } = await isAuthenticated(request, {
+    redirectTo: '/profile',
+    checkVerified: true
   });
 
   const user = await db.user.findUnique({

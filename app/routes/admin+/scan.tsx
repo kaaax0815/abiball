@@ -1,6 +1,5 @@
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
 import type { V2_MetaFunction } from '@remix-run/react';
 import { useActionData } from '@remix-run/react';
 import { useSubmit } from '@remix-run/react';
@@ -10,10 +9,9 @@ import { useZxing } from 'react-zxing';
 import invariant from 'tiny-invariant';
 
 import ScanResultDialog from '~/components/Scan/ScanResultDialog';
-import { authenticator } from '~/services/auth.server';
 import { verifyAztec } from '~/services/aztec.server';
-import { invalidateSession } from '~/utils/auth.server';
-import { db, isAdmin } from '~/utils/db.server';
+import { isAuthenticated } from '~/utils/auth.server';
+import { db } from '~/utils/db.server';
 
 const HINTS = new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.AZTEC]]]);
 
@@ -23,17 +21,11 @@ export const meta: V2_MetaFunction = () => {
 
 export async function action({ request }: ActionArgs) {
   const clonedRequest = request.clone();
-  const { userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login?redirectTo=/admin/scan'
+  await isAuthenticated(request, {
+    redirectTo: '/admin/scan',
+    checkVerified: true,
+    checkAdmin: true
   });
-
-  const admin = await isAdmin(userId);
-
-  if (!admin) {
-    return redirect('/');
-  } else if (admin === null) {
-    throw await invalidateSession(request);
-  }
 
   const formData = await clonedRequest.formData();
   const payload = formData.get('payload');
@@ -89,17 +81,11 @@ export async function action({ request }: ActionArgs) {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const { userId } = await authenticator.isAuthenticated(request, {
-    failureRedirect: '/login?redirectTo=/admin/scan'
+  await isAuthenticated(request, {
+    redirectTo: '/admin/scan',
+    checkVerified: true,
+    checkAdmin: true
   });
-
-  const admin = await isAdmin(userId);
-
-  if (!admin) {
-    throw redirect('/');
-  } else if (admin === null) {
-    throw await invalidateSession(request);
-  }
 
   return null;
 }
