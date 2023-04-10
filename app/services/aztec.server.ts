@@ -29,10 +29,10 @@ export function verifyAztec(content: string) {
   const [header, payload, signature] = content.split('.');
   const verifiedHeader = verifyHeader(header);
   if (!verifiedHeader) {
-    return null;
+    throw new Error('Ungültiger KAC Header');
   }
-  if (!verifySignature(payload, signature)) {
-    return null;
+  if (!verifySignature(`${header}.${payload}`, signature)) {
+    throw new Error('Ungültige KAC Signatur');
   }
   return decodePayload(payload);
 }

@@ -23,12 +23,7 @@ export function verifyHeader(header: string) {
 }
 
 export function verifySignature(data: string, signature: string) {
-  const decodedData = decodeBase64UrlToString(data);
-  const decodedSignature = decodeBase64UrlToString(signature);
-  return (
-    crypto.createHmac('sha256', loadAztecSecret()).update(decodedData).digest('base64url') ===
-    decodedSignature
-  );
+  return generateSignature(data) === signature;
 }
 
 export function decodePayload(payload: string) {
@@ -46,7 +41,7 @@ export const HEADER = {
 export function generatePayload(ticket: Ticket) {
   const payload = {
     id: ticket.id,
-    owner: ticket.userId,
+    ownerId: ticket.ownerId,
     generatedAt: dateToUnix(new Date())
   };
 

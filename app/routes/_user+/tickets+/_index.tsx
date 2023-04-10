@@ -13,18 +13,18 @@ export const meta: V2_MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
-  const user = await authenticator.isAuthenticated(request, {
+  const { userId } = await authenticator.isAuthenticated(request, {
     failureRedirect: '/login?redirectTo=/tickets'
   });
 
-  const verified = await isVerified(user.userId);
+  const verified = await isVerified(userId);
   if (!verified) {
     return redirect('/verify');
   }
 
   const tickets = await db.ticket.findMany({
     where: {
-      userId: user.userId
+      ownerId: userId
     }
   });
 

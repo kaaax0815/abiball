@@ -26,6 +26,7 @@
     "MSGPACK",
     "netlify",
     "sendinblue",
-    "tailwindcss"
+    "tailwindcss",
+    "zxing"
   ]
 }

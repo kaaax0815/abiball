@@ -24,7 +24,7 @@ export async function loader({ request, params }: LoaderArgs) {
     return notFound({ error: 'Ticket not found' });
   }
 
-  if (ticket.userId !== userId) {
+  if (ticket.ownerId !== userId) {
     return forbidden({ error: 'Not allowed to access this resource' });
   }
 
