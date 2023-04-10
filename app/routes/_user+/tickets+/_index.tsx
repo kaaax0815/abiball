@@ -4,6 +4,7 @@ import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { authenticator } from '~/services/auth.server';
+import { invalidateSession } from '~/utils/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 
 export const meta: V2_MetaFunction = () => [
@@ -20,6 +21,8 @@ export async function loader({ request }: LoaderArgs) {
   const verified = await isVerified(userId);
   if (!verified) {
     return redirect('/verify');
+  } else if (verified === null) {
+    throw await invalidateSession(request);
   }
 
   const tickets = await db.ticket.findMany({

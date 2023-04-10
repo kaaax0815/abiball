@@ -6,6 +6,7 @@ import invariant from 'tiny-invariant';
 
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
+import { invalidateSession } from '~/utils/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
 
@@ -21,6 +22,8 @@ export async function action({ request }: ActionArgs) {
   const verified = await isVerified(userId);
   if (verified) {
     return redirect('/tickets');
+  } else if (verified === null) {
+    throw await invalidateSession(request);
   }
 
   const user = await db.user.findUnique({
@@ -47,6 +50,8 @@ export async function loader({ request }: LoaderArgs) {
 
   if (verified) {
     throw redirect('/tickets');
+  } else if (verified === null) {
+    throw await invalidateSession(request);
   }
 }
 

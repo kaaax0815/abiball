@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import invariant from 'tiny-invariant';
 
 let db: PrismaClient;
 
@@ -27,7 +26,9 @@ export async function isVerified(userId: string) {
     where: { id: userId },
     select: { verified: true }
   });
-  invariant(user, 'User not found');
+  if (!user) {
+    return null;
+  }
   return user.verified ?? false;
 }
 
@@ -36,6 +37,8 @@ export async function isAdmin(userId: string) {
     where: { id: userId },
     select: { admin: true }
   });
-  invariant(user, 'User not found');
+  if (!user) {
+    return null;
+  }
   return user.admin ?? false;
 }

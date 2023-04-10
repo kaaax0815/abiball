@@ -7,6 +7,7 @@ import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
+import { invalidateSession } from '~/utils/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 import { badRequest, getOrigin } from '~/utils/request.server';
 import { createStripeSession } from '~/utils/stripe.server';
@@ -60,6 +61,8 @@ export async function loader({ request }: LoaderArgs) {
   const verified = await isVerified(userId);
   if (!verified) {
     return redirect('/verify');
+  } else if (verified === null) {
+    throw await invalidateSession(request);
   }
   return null;
 }

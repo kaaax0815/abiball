@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 import ScanResultDialog from '~/components/Scan/ScanResultDialog';
 import { authenticator } from '~/services/auth.server';
 import { verifyAztec } from '~/services/aztec.server';
+import { invalidateSession } from '~/utils/auth.server';
 import { db, isAdmin } from '~/utils/db.server';
 
 const HINTS = new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.AZTEC]]]);
@@ -30,6 +31,8 @@ export async function action({ request }: ActionArgs) {
 
   if (!admin) {
     return redirect('/');
+  } else if (admin === null) {
+    throw await invalidateSession(request);
   }
 
   const formData = await clonedRequest.formData();
@@ -94,6 +97,8 @@ export async function loader({ request }: LoaderArgs) {
 
   if (!admin) {
     throw redirect('/');
+  } else if (admin === null) {
+    throw await invalidateSession(request);
   }
 
   return null;
