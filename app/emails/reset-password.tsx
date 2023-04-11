@@ -17,7 +17,7 @@ export type ResetPasswordProps = {
 };
 
 const DefaultResetPasswordProps: ResetPasswordProps = {
-  resetUrl: 'https://example.com/password?token=123',
+  resetUrl: 'https://example.com/reset-password?token=123',
   logoUrl: 'https://example.com/Logo.png'
 };
 
@@ -47,7 +47,8 @@ export function ResetPassword({
           </Section>
           <Text style={text}>
             Wenn du dich nicht bei uns registriert hast, kannst du diese Email einfach ignorieren.
-            Wenn du dein Passwort nicht zurücksetzen möchtest, kannst du diese Email einfach ignorieren.
+            Wenn du dein Passwort nicht zurücksetzen möchtest, kannst du diese Email einfach
+            ignorieren.
           </Text>
           <Text style={text}>
             Grüße,

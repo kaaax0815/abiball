@@ -41,7 +41,7 @@ export async function sendMail(
       const resetToken = createResetToken(to);
       const content = renderResetPassword({
         logoUrl: `${origin}/Logo.png`,
-        resetUrl: `${origin}/password?token=${resetToken}`
+        resetUrl: `${origin}/reset-password?token=${resetToken}`
       });
       const mail = await transporter.sendMail({
         from: {
