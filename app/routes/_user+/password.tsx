@@ -1,6 +1,6 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
-import { redirect } from '@remix-run/node';
+import type { ActionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
 import invariant from 'tiny-invariant';
@@ -8,36 +8,48 @@ import invariant from 'tiny-invariant';
 import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
+import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
-import { verifyResetToken } from '~/utils/mail.server';
 import { badRequest } from '~/utils/request.server';
 import { validatePassword } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
-  const token = new URL(request.url).searchParams.get('token');
-
-  if (!token) {
-    throw badRequest('Fehlender Token');
-  }
-
-  const formData = await request.formData();
-  const password = formData.get('password');
+  const clonedRequest = request.clone();
+  const { userId } = await isAuthenticated(request, {
+    redirectTo: '/password',
+    checkVerified: true
+  });
+  const formData = await clonedRequest.formData();
+  const currentPassword = formData.get('current-password');
+  const newPassword = formData.get('new-password');
 
   try {
-    invariant(typeof password === 'string', 'Ungültiges Formular');
+    invariant(typeof currentPassword === 'string', 'Ungültiges Formular');
+    invariant(typeof newPassword === 'string', 'Ungültiges Formular');
 
-    validatePassword(password);
-
-    const email = verifyResetToken(token);
-
-    await db.user.update({
-      where: { email },
-      data: {
-        passwordHash: await bcrypt.hash(password, 10)
-      }
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { passwordHash: true }
     });
 
-    return redirect('/login');
+    if (!user) {
+      throw await invalidateSession(request);
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.passwordHash);
+
+    invariant(isPasswordCorrect, 'Altes Passwort ist falsch');
+
+    validatePassword(newPassword);
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+
+    await db.user.update({
+      where: { id: userId },
+      data: { passwordHash }
+    });
+
+    return json(null);
   } catch (e) {
     if (e instanceof Error) {
       return badRequest({ message: e.message });
@@ -46,17 +58,7 @@ export async function action({ request }: ActionArgs) {
   }
 }
 
-export async function loader({ request }: LoaderArgs) {
-  const token = new URL(request.url).searchParams.get('token');
-
-  if (!token) {
-    throw redirect('/');
-  }
-
-  return null;
-}
-
-export default function Password() {
+export default function Settings() {
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
   const submitting = navigation.state === 'submitting';
@@ -65,17 +67,24 @@ export default function Password() {
       <div className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Neues Passwort
+            Profil
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Setze ein neues Passwort wenn du deines vergessen hast
+            Hier kannst du dein Passwort bearbeiten
           </p>
           <Form method="post">
             <FormInput
-              id="password"
-              name="password"
-              label="Passwort"
+              id="current-password"
               type="password"
+              name="current-password"
+              label="Altes Passwort"
+              autoComplete="current-password"
+            />
+            <FormInput
+              id="new-password"
+              type="password"
+              name="new-password"
+              label="Neues Passwort"
               autoComplete="new-password"
             />
             <FormError error={actionData?.message} />
