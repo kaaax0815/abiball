@@ -1,7 +1,6 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
-import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
 import { ActionFormResponse } from '~/components/FormResponse';
@@ -10,7 +9,7 @@ import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest, success } from '~/utils/request.server';
-import { validateLastname } from '~/utils/validation.server';
+import { validate, validateLastname } from '~/utils/validation.server';
 import { validateFirstname } from '~/utils/validation.server';
 
 export const meta: V2_MetaFunction = () => {
@@ -30,8 +29,8 @@ export async function action({ request }: ActionArgs) {
   const lastname = form.get('lastname');
 
   try {
-    invariant(typeof firstname === 'string', 'Ungültiges Formular');
-    invariant(typeof lastname === 'string', 'Ungültiges Formular');
+    validate(typeof firstname === 'string', 'Ungültiges Formular');
+    validate(typeof lastname === 'string', 'Ungültiges Formular');
 
     validateFirstname(firstname);
     validateLastname(lastname);

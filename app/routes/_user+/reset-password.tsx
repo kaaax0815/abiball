@@ -3,7 +3,6 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
-import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
 import FormResponse from '~/components/FormResponse';
@@ -11,7 +10,7 @@ import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { verifyResetToken } from '~/utils/mail.server';
 import { badRequest } from '~/utils/request.server';
-import { validatePassword } from '~/utils/validation.server';
+import {validate, validatePassword } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
   const token = new URL(request.url).searchParams.get('token');
@@ -24,7 +23,7 @@ export async function action({ request }: ActionArgs) {
   const password = formData.get('password');
 
   try {
-    invariant(typeof password === 'string', 'Ungültiges Formular');
+    validate(typeof password === 'string', 'Ungültiges Formular');
 
     validatePassword(password);
 

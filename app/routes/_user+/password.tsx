@@ -2,7 +2,6 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
-import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
 import { ActionFormResponse } from '~/components/FormResponse';
@@ -11,7 +10,7 @@ import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest, success } from '~/utils/request.server';
-import { validatePassword } from '~/utils/validation.server';
+import { validate, validatePassword } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
   const clonedRequest = request.clone();
@@ -24,8 +23,8 @@ export async function action({ request }: ActionArgs) {
   const newPassword = formData.get('new-password');
 
   try {
-    invariant(typeof currentPassword === 'string', 'Ungültiges Formular');
-    invariant(typeof newPassword === 'string', 'Ungültiges Formular');
+    validate(typeof currentPassword === 'string', 'Ungültiges Formular');
+    validate(typeof newPassword === 'string', 'Ungültiges Formular');
 
     const user = await db.user.findUnique({
       where: { id: userId },
@@ -38,7 +37,7 @@ export async function action({ request }: ActionArgs) {
 
     const isPasswordCorrect = await bcrypt.compare(currentPassword, user.passwordHash);
 
-    invariant(isPasswordCorrect, 'Altes Passwort ist falsch');
+    validate(isPasswordCorrect, 'Altes Passwort ist falsch');
 
     validatePassword(newPassword);
 

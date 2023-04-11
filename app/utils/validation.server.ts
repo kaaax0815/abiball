@@ -48,3 +48,17 @@ export function validatePassword(password: string) {
     throw new AuthorizationError(`Passwort muss mindestens 8 Zeichen lang sein`);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function validate(check: any, message: string): asserts check {
+  if (!check) {
+    throw new ValidationError(message);
+  }
+}
+
+export class ValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}

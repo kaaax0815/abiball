@@ -6,12 +6,12 @@ import { useSubmit } from '@remix-run/react';
 import { BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { useCallback, useEffect, useState } from 'react';
 import { useZxing } from 'react-zxing';
-import invariant from 'tiny-invariant';
 
 import ScanResultDialog from '~/components/Scan/ScanResultDialog';
 import { verifyAztec } from '~/services/aztec.server';
 import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
+import { validate } from '~/utils/validation.server';
 
 const HINTS = new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.AZTEC]]]);
 
@@ -31,11 +31,11 @@ export async function action({ request }: ActionArgs) {
   const payload = formData.get('payload');
 
   try {
-    invariant(typeof payload === 'string', 'Ungültiger Payload');
+    validate(typeof payload === 'string', 'Ungültiger Payload');
 
     const data = verifyAztec(payload);
 
-    invariant(typeof data.id === 'string', 'Ungültiger Payload');
+    validate(typeof data.id === 'string', 'Ungültiger Payload');
 
     const ticket = await db.ticket.findUnique({
       where: {
@@ -48,9 +48,9 @@ export async function action({ request }: ActionArgs) {
       }
     });
 
-    invariant(ticket, 'Ticket nicht gefunden');
+    validate(ticket, 'Ticket nicht gefunden');
 
-    invariant(ticket.ownerId === data.ownerId, 'Ungültiger Besitzer');
+    validate(ticket.ownerId === data.ownerId, 'Ungültiger Besitzer');
 
     const owner = await db.user.findUnique({
       where: {
@@ -62,7 +62,7 @@ export async function action({ request }: ActionArgs) {
       }
     });
 
-    invariant(owner, 'Besitzer nicht gefunden');
+    validate(owner, 'Besitzer nicht gefunden');
 
     const result = {
       firstname: ticket.firstname,

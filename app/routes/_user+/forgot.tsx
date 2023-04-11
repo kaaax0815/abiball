@@ -1,7 +1,6 @@
 import { InboxArrowDownIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
-import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
 import { ActionFormResponse } from '~/components/FormResponse';
@@ -9,14 +8,14 @@ import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
 import { badRequest, success } from '~/utils/request.server';
-import { validateEmail } from '~/utils/validation.server';
+import { validate, validateEmail } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get('email');
 
   try {
-    invariant(typeof email === 'string', 'Ungültiges Formular');
+    validate(typeof email === 'string', 'Ungültiges Formular');
     validateEmail(email);
   } catch (e) {
     if (e instanceof Error) {
