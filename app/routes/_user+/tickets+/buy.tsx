@@ -3,8 +3,8 @@ import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
+import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
@@ -81,7 +81,7 @@ export default function Buy() {
             <FormInput id="firstname" autoComplete="given-name" label="Vorname" name="firstname" />
             <FormInput id="lastname" autoComplete="family-name" label="Nachname" name="lastname" />
             <FormSubmit label="Kaufen" submitting={submitting} />
-            <FormError error={actionData?.message} />
+            <FormResponse response={actionData?.message} type="error" />
           </Form>
         </div>
       </div>

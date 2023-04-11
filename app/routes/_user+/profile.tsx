@@ -4,8 +4,8 @@ import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
+import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
@@ -103,7 +103,7 @@ export default function Profile() {
               autoComplete="family-name"
               defaultValue={loaderData.lastname}
             />
-            <FormError error={actionData?.message} />
+            <FormResponse response={actionData?.message} type="error" />
             <FormSubmit label="Speichern" submitting={submitting} Icon={PencilSquareIcon} />
           </Form>
         </div>

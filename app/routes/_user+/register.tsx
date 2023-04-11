@@ -2,8 +2,8 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 
-import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
+import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
 import { sessionStorage } from '~/services/session.server';
@@ -68,7 +68,7 @@ export default function Register() {
               label="Passwort"
               autoComplete="new-password"
             />
-            <FormError error={loaderData.message} />
+            <FormResponse response={loaderData.message} type="error" />
             <FormSubmit label="Registrieren" submitting={submitting} />
           </Form>
         </div>

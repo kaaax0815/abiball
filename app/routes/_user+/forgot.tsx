@@ -4,8 +4,8 @@ import { json } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
-import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
+import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
@@ -65,7 +65,7 @@ export default function Forgot() {
               type="email"
               autoComplete="email"
             />
-            <FormError error={actionData?.message} />
+            <FormResponse response={actionData?.message} type="error" />
             <FormSubmit label="Email schicken" submitting={submitting} Icon={InboxArrowDownIcon} />
           </Form>
         </div>

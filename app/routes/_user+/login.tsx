@@ -2,8 +2,8 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Form, Link, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 
-import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
+import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
 import { sessionStorage } from '~/services/session.server';
@@ -75,7 +75,7 @@ export default function Login() {
             <Link to="/forgot" className="text-sm font-medium hover:underline">
               Passwort vergessen?
             </Link>
-            <FormError error={loaderData.message} />
+            <FormResponse response={loaderData.message} type="error" />
             <FormSubmit label="Anmelden" submitting={submitting} />
           </Form>
         </div>
