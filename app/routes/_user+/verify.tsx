@@ -1,14 +1,15 @@
 import { InboxArrowDownIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import { Form, useNavigation } from '@remix-run/react';
-import invariant from 'tiny-invariant';
+import { Form, useActionData, useNavigation } from '@remix-run/react';
 
+import { ActionFormResponse } from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { authenticator } from '~/services/auth.server';
 import { invalidateSession } from '~/utils/auth.server';
 import { db, isVerified } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
+import { success } from '~/utils/request.server';
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: 'Verifizieren - Abiball' }];
@@ -31,14 +32,16 @@ export async function action({ request }: ActionArgs) {
     select: { email: true, firstname: true, lastname: true }
   });
 
-  invariant(user, "User doesn't exist");
+  if (!user) {
+    throw await invalidateSession(request);
+  }
 
   await sendMail(request, 'verify', {
     address: user.email,
     name: `${user.firstname} ${user.lastname}`
   });
 
-  return null;
+  return success({ message: 'Wir haben dir eine Email geschickt' });
 }
 
 export async function loader({ request }: LoaderArgs) {
@@ -53,10 +56,13 @@ export async function loader({ request }: LoaderArgs) {
   } else if (verified === null) {
     throw await invalidateSession(request);
   }
+
+  return null;
 }
 
 export default function Verify() {
   const navigation = useNavigation();
+  const actionData = useActionData<typeof action>();
   const submitting = navigation.state === 'submitting';
   return (
     <main className="flex items-center bg-slate-200">
@@ -72,6 +78,7 @@ export default function Verify() {
             Wir schicken dir eine Email mit einem Link
           </p>
           <Form method="post">
+            <ActionFormResponse actionData={actionData} />
             <FormSubmit label="Email schicken" submitting={submitting} Icon={InboxArrowDownIcon} />
           </Form>
         </div>

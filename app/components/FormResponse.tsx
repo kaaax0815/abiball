@@ -1,6 +1,6 @@
 export type FormResponseProps = {
   response: string | undefined | null;
-  type: 'error' | 'success';
+  type?: 'error' | 'success';
 };
 
 export default function FormResponse({ type, response }: FormResponseProps) {
@@ -12,4 +12,20 @@ export default function FormResponse({ type, response }: FormResponseProps) {
       <p role="alert">{response}</p>
     </div>
   );
+}
+
+export type ActionFormResponseProps = {
+  actionData:
+    | {
+        message: string;
+        type: 'error' | 'success';
+      }
+    | undefined;
+};
+
+export function ActionFormResponse({ actionData }: ActionFormResponseProps) {
+  if (!actionData) {
+    return null;
+  }
+  return <FormResponse type={actionData.type} response={actionData.message} />;
 }

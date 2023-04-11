@@ -1,12 +1,11 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
-import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
 import FormResponse from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
-import { isAuthenticated } from '~/utils/auth.server';
+import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest, getOrigin } from '~/utils/request.server';
 import { createStripeSession } from '~/utils/stripe.server';
@@ -37,7 +36,9 @@ export async function action({ request }: ActionArgs) {
     select: { email: true }
   });
 
-  invariant(user, "User doesn't exist");
+  if (!user) {
+    throw await invalidateSession(request);
+  }
 
   const session = await createStripeSession({
     userId,

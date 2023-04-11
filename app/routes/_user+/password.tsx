@@ -1,17 +1,16 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
 import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
-import FormResponse from '~/components/FormResponse';
+import { ActionFormResponse } from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
-import { badRequest } from '~/utils/request.server';
+import { badRequest, success } from '~/utils/request.server';
 import { validatePassword } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
@@ -50,7 +49,7 @@ export async function action({ request }: ActionArgs) {
       data: { passwordHash }
     });
 
-    return json(null);
+    return success({ message: 'Passwort erfolgreich geändert' });
   } catch (e) {
     if (e instanceof Error) {
       return badRequest({ message: e.message });
@@ -89,7 +88,7 @@ export default function Settings() {
               label="Neues Passwort"
               autoComplete="new-password"
             />
-            <FormResponse response={actionData?.message} type="error" />
+            <ActionFormResponse actionData={actionData} />
             <FormSubmit label="Speichern" submitting={submitting} Icon={PencilSquareIcon} />
           </Form>
         </div>

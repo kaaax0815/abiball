@@ -1,15 +1,14 @@
 import { InboxArrowDownIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
-import FormResponse from '~/components/FormResponse';
+import { ActionFormResponse } from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { sendMail } from '~/utils/mail.server';
-import { badRequest } from '~/utils/request.server';
+import { badRequest, success } from '~/utils/request.server';
 import { validateEmail } from '~/utils/validation.server';
 
 export async function action({ request }: ActionArgs) {
@@ -32,7 +31,9 @@ export async function action({ request }: ActionArgs) {
   });
 
   if (!user) {
-    return json(null);
+    return success({
+      message: 'Wir haben dir eine Email geschickt wenn die Email-Adresse gültig ist'
+    });
   }
 
   await sendMail(request, 'reset-password', {
@@ -40,7 +41,9 @@ export async function action({ request }: ActionArgs) {
     name: `${user.firstname} ${user.lastname}`
   });
 
-  return json(null);
+  return success({
+    message: 'Wir haben dir eine Email geschickt wenn die Email-Adresse gültig ist'
+  });
 }
 
 export default function Forgot() {
@@ -65,7 +68,7 @@ export default function Forgot() {
               type="email"
               autoComplete="email"
             />
-            <FormResponse response={actionData?.message} type="error" />
+            <ActionFormResponse actionData={actionData} />
             <FormSubmit label="Email schicken" submitting={submitting} Icon={InboxArrowDownIcon} />
           </Form>
         </div>

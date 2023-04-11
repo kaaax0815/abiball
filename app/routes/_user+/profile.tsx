@@ -1,16 +1,15 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
 import { Form, useActionData, useLoaderData, useNavigation } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 
 import FormInput from '~/components/FormInput';
-import FormResponse from '~/components/FormResponse';
+import { ActionFormResponse } from '~/components/FormResponse';
 import FormSubmit from '~/components/FormSubmit';
 import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
-import { badRequest } from '~/utils/request.server';
+import { badRequest, success } from '~/utils/request.server';
 import { validateLastname } from '~/utils/validation.server';
 import { validateFirstname } from '~/utils/validation.server';
 
@@ -45,7 +44,9 @@ export async function action({ request }: ActionArgs) {
       }
     });
 
-    return json(null);
+    return success({
+      message: 'Dein Profil wurde erfolgreich aktualisiert'
+    });
   } catch (e) {
     if (e instanceof Error) {
       return badRequest({ message: e.message });
@@ -103,7 +104,7 @@ export default function Profile() {
               autoComplete="family-name"
               defaultValue={loaderData.lastname}
             />
-            <FormResponse response={actionData?.message} type="error" />
+            <ActionFormResponse actionData={actionData} />
             <FormSubmit label="Speichern" submitting={submitting} Icon={PencilSquareIcon} />
           </Form>
         </div>
