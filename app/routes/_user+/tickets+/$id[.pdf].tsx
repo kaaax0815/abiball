@@ -67,7 +67,8 @@ export async function loader({ request, params }: LoaderArgs) {
   return new Response(pdf, {
     status: 200,
     headers: {
-      'Content-Type': 'application/pdf'
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="Abiball Ticket ${ticket.firstname} ${ticket.lastname}.pdf"`
     }
   });
 }
