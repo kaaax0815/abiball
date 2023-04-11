@@ -1,5 +1,7 @@
 import { NavLink } from '@remix-run/react';
 
+import { classNames } from '~/utils/style';
+
 const tabs = [
   {
     name: 'Profil',
@@ -20,8 +22,10 @@ export default function SettingsTabs() {
             <NavLink
               to={tab.to}
               className={({ isActive }) =>
-                `inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600` +
-                `${isActive ? ' active bg-gray-100 text-blue-600' : ''}`
+                classNames(
+                  'inline-block rounded-t-lg p-4 hover:bg-gray-50 hover:text-gray-600',
+                  isActive ? 'bg-gray-100 text-blue-600' : ''
+                )
               }
             >
               {tab.name}

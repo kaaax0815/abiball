@@ -7,6 +7,8 @@ import {
 import { Form, Link, NavLink } from '@remix-run/react';
 import { Fragment } from 'react';
 
+import { classNames } from '~/utils/style';
+
 export type ProfileMenuProps = {
   user: { firstname: string; lastname: string; admin: boolean } | null;
 };
@@ -47,10 +49,10 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
                 {({ active }) => (
                   <NavLink
                     to="/profile"
-                    className={
-                      'block w-full text-left px-2 py-2 text-sm text-gray-700 aria-active:bg-gray-200' +
-                      `${active ? ' bg-gray-100' : ''}`
-                    }
+                    className={classNames(
+                      'block w-full text-left px-2 py-2 text-sm text-gray-700 aria-active:bg-gray-200',
+                      active ? 'bg-gray-100' : ''
+                    )}
                   >
                     <span>
                       <UserIcon className="inline-block h-6 w-6" /> Profil
@@ -63,10 +65,10 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
                   <Form action="/logout" method="post">
                     <button
                       type="submit"
-                      className={
-                        'block w-full text-left px-2 py-2 text-sm text-gray-700' +
-                        `${active ? ' bg-gray-100' : ''}`
-                      }
+                      className={classNames(
+                        'block w-full text-left px-2 py-2 text-sm text-gray-700',
+                        active ? 'bg-gray-100' : ''
+                      )}
                     >
                       <span>
                         <ArrowLeftOnRectangleIcon className="inline-block h-6 w-6" /> Abmelden
@@ -80,10 +82,10 @@ export default function ProfileMenu({ user }: ProfileMenuProps) {
                   {({ active }) => (
                     <NavLink
                       to="/admin"
-                      className={
-                        'block w-full text-left px-2 py-2 text-sm text-red-700 aria-active:bg-gray-200' +
-                        `${active ? ' bg-gray-100' : ''}`
-                      }
+                      className={classNames(
+                        'block w-full text-left px-2 py-2 text-sm text-red-700 aria-active:bg-gray-200',
+                        active ? 'bg-gray-100' : ''
+                      )}
                     >
                       <span>
                         <AdjustmentsHorizontalIcon className="inline-block h-6 w-6" /> Admin
