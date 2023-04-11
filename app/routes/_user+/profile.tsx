@@ -7,6 +7,7 @@ import invariant from 'tiny-invariant';
 import FormError from '~/components/FormError';
 import FormInput from '~/components/FormInput';
 import FormSubmit from '~/components/FormSubmit';
+import SettingsTabs from '~/components/SettingsTabs';
 import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest } from '~/utils/request.server';
@@ -77,8 +78,9 @@ export default function Profile() {
   const actionData = useActionData<typeof action>();
   const submitting = navigation.state === 'submitting';
   return (
-    <main className="flex items-center bg-slate-200">
-      <div className="mx-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
+    <main className="flex flex-col items-center bg-slate-200">
+      <SettingsTabs />
+      <div className="m-auto flex max-w-sm flex-col items-center justify-center rounded-md border border-gray-200 bg-white p-4 shadow">
         <div className="w-full max-w-md space-y-8">
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Profil
