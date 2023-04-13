@@ -131,9 +131,9 @@ export default function Scan() {
   });
 
   return (
-    <main className="flex flex-col justify-center text-center">
+    <main>
       <ScanResultDialog isOpen={isOpen} closeModal={closeModal} result={result} />
-      <video ref={ref} className="max-h-screen w-screen" />
+      <video ref={ref} className="h-auto max-h-full w-auto max-w-full" />
     </main>
   );
 }

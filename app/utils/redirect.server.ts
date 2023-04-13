@@ -6,7 +6,10 @@ export const ALLOWED_URLS = [
   '/profile',
   '/verify',
   '/admin/scan',
-  '/password'
+  '/password',
+  '/admin',
+  '/admin/users',
+  '/admin/tickets'
 ] as const;
 
 export function parseRedirect(url: string) {
