@@ -2,7 +2,7 @@ import { decode as decodeMsgPack, encode as encodeMsgPack } from '@msgpack/msgpa
 import type { Ticket } from '@prisma/client';
 import crypto from 'crypto';
 
-import { dateToUnix } from './time.server';
+import { dateToUnix } from './time';
 
 export function verifyHeader(header: string) {
   try {

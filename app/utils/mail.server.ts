@@ -5,7 +5,7 @@ import renderVerify from '~/emails/verify';
 import { transporter } from '~/services/mail.server';
 
 import { getOrigin } from './request.server';
-import { dateToUnix } from './time.server';
+import { dateToUnix } from './time';
 
 export type MailMethods = 'verify' | 'reset-password';
 

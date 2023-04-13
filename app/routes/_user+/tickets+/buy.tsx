@@ -1,3 +1,4 @@
+import { PlusIcon } from '@heroicons/react/24/outline';
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
@@ -81,8 +82,8 @@ export default function Buy() {
           <Form method="post">
             <FormInput id="firstname" autoComplete="given-name" label="Vorname" name="firstname" />
             <FormInput id="lastname" autoComplete="family-name" label="Nachname" name="lastname" />
-            <FormSubmit label="Kaufen" submitting={submitting} />
             <FormResponse response={actionData?.message} type="error" />
+            <FormSubmit label="Kaufen" submitting={submitting} Icon={PlusIcon} />
           </Form>
         </div>
       </div>
