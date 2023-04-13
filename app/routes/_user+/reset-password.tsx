@@ -1,5 +1,5 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
@@ -10,7 +10,11 @@ import FormSubmit from '~/components/FormSubmit';
 import { db } from '~/utils/db.server';
 import { verifyResetToken } from '~/utils/mail.server';
 import { badRequest } from '~/utils/request.server';
-import {validate, validatePassword } from '~/utils/validation.server';
+import { validate, validatePassword } from '~/utils/validation.server';
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Neues Passwort - Abiball' }];
+};
 
 export async function action({ request }: ActionArgs) {
   const token = new URL(request.url).searchParams.get('token');

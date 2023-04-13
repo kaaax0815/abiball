@@ -1,10 +1,14 @@
 import { ArrowLeftCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
-import type { LoaderArgs } from '@remix-run/node';
+import type { LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 
 import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Tickets - Admin - Abiball' }];
+};
 
 export async function loader({ request }: LoaderArgs) {
   await isAuthenticated(request, {

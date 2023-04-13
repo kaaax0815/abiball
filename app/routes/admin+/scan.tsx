@@ -1,6 +1,5 @@
-import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import type { V2_MetaFunction } from '@remix-run/react';
 import { useActionData } from '@remix-run/react';
 import { useSubmit } from '@remix-run/react';
 import { BarcodeFormat, DecodeHintType } from '@zxing/library';
@@ -16,7 +15,7 @@ import { validate } from '~/utils/validation.server';
 const HINTS = new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.AZTEC]]]);
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: 'Scan - Abiball' }];
+  return [{ title: 'Scan - Admin - Abiball' }];
 };
 
 export async function action({ request }: ActionArgs) {

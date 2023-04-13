@@ -1,5 +1,5 @@
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, V2_MetaFunction } from '@remix-run/node';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 import bcrypt from 'bcryptjs';
 
@@ -11,6 +11,10 @@ import { invalidateSession, isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { badRequest, success } from '~/utils/request.server';
 import { validate, validatePassword } from '~/utils/validation.server';
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: 'Passwort - Abiball' }];
+};
 
 export async function action({ request }: ActionArgs) {
   const clonedRequest = request.clone();
