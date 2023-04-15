@@ -7223,13 +7223,6 @@ react-router@6.10.0:
   dependencies:
     "@remix-run/router" "1.5.0"
 
-react-zxing@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/react-zxing/-/react-zxing-1.1.4.tgz#cef9b1f0ac1365ccbd4999da207166eac9a0d605"
-  integrity sha512-2BRjqpiNnVNIefxgp/GK+Pj6paNodh2nnky/fFqnMRrZmp7ExEl7vcwqJ4BKOjPZKwD3oWG+INX1Rl18rHQjsw==
-  dependencies:
-    "@zxing/library" "^0.19.2"
-
 react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"

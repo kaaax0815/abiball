@@ -2,17 +2,14 @@ import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
 import { useSubmit } from '@remix-run/react';
-import { BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { useCallback, useEffect, useState } from 'react';
-import { useZxing } from 'react-zxing';
 
 import ScanResultDialog from '~/components/Scan/ScanResultDialog';
+import useZxing from '~/hooks/useZxing';
 import { verifyAztec } from '~/services/aztec.server';
 import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
 import { validate } from '~/utils/validation.server';
-
-const HINTS = new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.AZTEC]]]);
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: 'Scan - Admin - Abiball' }];
@@ -117,7 +114,6 @@ export default function Scan() {
   }, []);
 
   const { ref } = useZxing({
-    hints: HINTS,
     onResult(result) {
       openModal();
       const formData = new FormData();
