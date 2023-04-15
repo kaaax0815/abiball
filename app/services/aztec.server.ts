@@ -1,6 +1,6 @@
-import type { Ticket } from '@prisma/client';
 import bwip from 'bwip-js';
 
+import type { Payload } from '~/utils/aztec.server';
 import {
   decodePayload,
   encodeContent,
@@ -12,7 +12,7 @@ import {
   verifySignature
 } from '~/utils/aztec.server';
 
-export function generateAztec(ticket: Ticket) {
+export function generateAztec(ticket: Payload) {
   const data = encodeData(HEADER, generatePayload(ticket));
   const signature = generateSignature(data);
   const content = encodeContent(data, signature);
@@ -20,8 +20,9 @@ export function generateAztec(ticket: Ticket) {
   return bwip.toBuffer({
     bcid: 'azteccode',
     text: content,
-    height: 30,
-    width: 30
+    // 285px
+    height: 55,
+    width: 55
   });
 }
 

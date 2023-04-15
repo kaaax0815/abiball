@@ -4,7 +4,7 @@ import { jsPDF } from 'jspdf';
 import { generateAztec } from '~/services/aztec.server';
 import { isAuthenticated } from '~/utils/auth.server';
 import { db } from '~/utils/db.server';
-import { fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
+import { badRequest, fetchImage, forbidden, getOrigin, notFound } from '~/utils/request.server';
 
 export async function loader({ request, params }: LoaderArgs) {
   const { userId } = await isAuthenticated(request, {
@@ -12,12 +12,25 @@ export async function loader({ request, params }: LoaderArgs) {
     checkVerified: true
   });
 
+  if (!params.id) {
+    return badRequest({ error: 'Missing ticket id' });
+  }
+
   const ticket = await db.ticket.findUnique({
     where: {
       id: params.id
     },
-    include: {
-      owner: true
+    select: {
+      id: true,
+      firstname: true,
+      lastname: true,
+      ownerId: true,
+      owner: {
+        select: {
+          firstname: true,
+          lastname: true
+        }
+      }
     }
   });
 

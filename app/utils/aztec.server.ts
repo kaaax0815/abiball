@@ -38,7 +38,12 @@ export const HEADER = {
   cty: 'MSGPACK'
 };
 
-export function generatePayload(ticket: Ticket) {
+export type Payload = {
+  id: Ticket['id'];
+  ownerId: Ticket['ownerId'];
+};
+
+export function generatePayload(ticket: Payload) {
   const payload = {
     id: ticket.id,
     ownerId: ticket.ownerId,
