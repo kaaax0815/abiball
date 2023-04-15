@@ -1,6 +1,6 @@
-import type { Result } from '@zxing/library';
+import type { DecodeContinuouslyCallback, Result } from '@zxing/library';
 import { BrowserAztecCodeReader } from '@zxing/library';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 export type UseZxingProps = {
   onResult: (result: Result) => void;
@@ -23,7 +23,14 @@ const DEFAULT_TIME_BETWEEN_DECODING_ATTEMPTS = 300;
  * @author <https://github.com/adamalfredsson/react-zxing>
  */
 export default function useZxing({ onResult, paused }: UseZxingProps) {
+  const resultHandlerRef = useRef(onResult);
   const ref = useRef<HTMLVideoElement>(null);
+
+  const decodeCallback = useCallback<DecodeContinuouslyCallback>((result) => {
+    if (result) {
+      resultHandlerRef.current(result);
+    }
+  }, []);
 
   const reader = useMemo(() => {
     const instance = new BrowserAztecCodeReader(DEFAULT_TIME_BETWEEN_SCANS);
@@ -38,15 +45,11 @@ export default function useZxing({ onResult, paused }: UseZxingProps) {
     if (paused) {
       return;
     }
-    reader.decodeFromConstraints(DEFAULT_CONSTRAINTS, ref.current, (result) => {
-      if (result) {
-        onResult(result);
-      }
-    });
+    reader.decodeFromConstraints(DEFAULT_CONSTRAINTS, ref.current, decodeCallback);
     return () => {
       reader.reset();
     };
-  }, [ref, reader, onResult, paused]);
+  }, [ref, reader, paused, decodeCallback]);
 
   return { ref };
 }
